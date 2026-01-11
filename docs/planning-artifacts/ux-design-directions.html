@@ -1,0 +1,1390 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Next-Step UX Design Directions</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+          'Helvetica Neue', Arial, sans-serif;
+        background: #f8fafc;
+        color: #1e293b;
+      }
+
+      .showcase-header {
+        background: linear-gradient(135deg, #2563eb 0%, #14b8a6 100%);
+        color: white;
+        padding: 32px 48px;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .showcase-header h1 {
+        font-size: 28px;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      .showcase-header p {
+        font-size: 14px;
+        opacity: 0.9;
+      }
+
+      .navigation {
+        display: flex;
+        gap: 16px;
+        padding: 24px 48px;
+        background: white;
+        border-bottom: 1px solid #e2e8f0;
+        overflow-x: auto;
+      }
+
+      .nav-btn {
+        padding: 12px 24px;
+        background: white;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        color: #64748b;
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+
+      .nav-btn:hover {
+        border-color: #2563eb;
+        color: #2563eb;
+        transform: translateY(-2px);
+      }
+
+      .nav-btn.active {
+        background: #2563eb;
+        border-color: #2563eb;
+        color: white;
+      }
+
+      .direction-container {
+        display: none;
+        padding: 48px;
+      }
+
+      .direction-container.active {
+        display: block;
+      }
+
+      .direction-header {
+        max-width: 1200px;
+        margin: 0 auto 32px;
+      }
+
+      .direction-header h2 {
+        font-size: 24px;
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 12px;
+      }
+
+      .direction-header .description {
+        font-size: 16px;
+        color: #64748b;
+        line-height: 24px;
+        margin-bottom: 16px;
+      }
+
+      .direction-tags {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .tag {
+        padding: 6px 12px;
+        background: #dbeafe;
+        color: #2563eb;
+        border-radius: 16px;
+        font-size: 12px;
+        font-weight: 500;
+      }
+
+      .mockup-frame {
+        max-width: 1440px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      /* Direction 1: Clean Productivity */
+      .direction-1 .app-layout {
+        display: flex;
+        height: 800px;
+      }
+
+      .sidebar {
+        width: 240px;
+        background: #f8fafc;
+        border-right: 1px solid #e2e8f0;
+        padding: 24px 0;
+      }
+
+      .sidebar-nav {
+        list-style: none;
+      }
+
+      .sidebar-nav li {
+        padding: 12px 24px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        color: #64748b;
+        transition: all 0.2s;
+      }
+
+      .sidebar-nav li:hover {
+        background: #e2e8f0;
+        color: #2563eb;
+      }
+
+      .sidebar-nav li.active {
+        background: #dbeafe;
+        color: #2563eb;
+        border-left: 3px solid #2563eb;
+      }
+
+      .main-content {
+        flex: 1;
+        padding: 32px;
+        overflow-y: auto;
+      }
+
+      .page-header {
+        margin-bottom: 24px;
+      }
+
+      .page-header h1 {
+        font-size: 36px;
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 8px;
+      }
+
+      .page-header .subtitle {
+        font-size: 14px;
+        color: #64748b;
+      }
+
+      .action-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+      }
+
+      .search-box {
+        flex: 1;
+        max-width: 400px;
+        padding: 12px 16px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 14px;
+      }
+
+      .btn-primary {
+        padding: 12px 24px;
+        background: #2563eb;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .btn-primary:hover {
+        background: #1d4ed8;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
+      }
+
+      .script-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 16px;
+      }
+
+      .script-card {
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 20px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .script-card:hover {
+        border-color: #2563eb;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+      }
+
+      .script-card h3 {
+        font-size: 16px;
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 8px;
+      }
+
+      .script-card .meta {
+        font-size: 12px;
+        color: #64748b;
+        margin-bottom: 12px;
+      }
+
+      .script-card .status {
+        display: inline-block;
+        padding: 4px 8px;
+        background: #d1fae5;
+        color: #10b981;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: 500;
+      }
+
+      /* Direction 2: Bold & Modern */
+      .direction-2 .top-nav {
+        background: white;
+        border-bottom: 1px solid #e2e8f0;
+        padding: 16px 48px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .direction-2 .logo {
+        font-size: 20px;
+        font-weight: 700;
+        color: #2563eb;
+      }
+
+      .direction-2 .nav-menu {
+        display: flex;
+        gap: 32px;
+        list-style: none;
+      }
+
+      .direction-2 .nav-menu a {
+        font-size: 14px;
+        font-weight: 500;
+        color: #64748b;
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+
+      .direction-2 .nav-menu a:hover {
+        color: #2563eb;
+      }
+
+      .direction-2 .hero-section {
+        background: linear-gradient(135deg, #2563eb 0%, #14b8a6 100%);
+        padding: 48px;
+        color: white;
+      }
+
+      .direction-2 .hero-section h1 {
+        font-size: 48px;
+        font-weight: 600;
+        margin-bottom: 16px;
+      }
+
+      .direction-2 .hero-section p {
+        font-size: 18px;
+        opacity: 0.9;
+        margin-bottom: 24px;
+      }
+
+      .direction-2 .btn-hero {
+        padding: 16px 32px;
+        background: white;
+        color: #2563eb;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .direction-2 .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 24px;
+        padding: 48px;
+      }
+
+      .direction-2 .gallery-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s;
+      }
+
+      .direction-2 .gallery-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+      }
+
+      .direction-2 .card-image {
+        width: 100%;
+        height: 180px;
+        background: linear-gradient(135deg, #dbeafe 0%, #ccfbf1 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 48px;
+      }
+
+      .direction-2 .card-content {
+        padding: 20px;
+      }
+
+      .direction-2 .card-content h3 {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      /* Direction 3: Enterprise Professional */
+      .direction-3 .enterprise-header {
+        background: #1e293b;
+        color: white;
+        padding: 20px 48px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .direction-3 .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+      }
+
+      .direction-3 .data-table thead {
+        background: #f8fafc;
+        border-bottom: 2px solid #e2e8f0;
+      }
+
+      .direction-3 .data-table th {
+        padding: 16px;
+        text-align: left;
+        font-size: 12px;
+        font-weight: 600;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .direction-3 .data-table td {
+        padding: 16px;
+        border-bottom: 1px solid #e2e8f0;
+        font-size: 14px;
+        color: #1e293b;
+      }
+
+      .direction-3 .data-table tr:hover {
+        background: #f8fafc;
+      }
+
+      /* Direction 4: Canva-Inspired */
+      .direction-4 .playful-header {
+        background: linear-gradient(to right, #2563eb, #14b8a6, #f59e0b);
+        padding: 4px;
+      }
+
+      .direction-4 .template-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 20px;
+        padding: 32px;
+      }
+
+      .direction-4 .template-card {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        transition: all 0.2s;
+        cursor: pointer;
+      }
+
+      .direction-4 .template-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+      }
+
+      .direction-4 .template-preview {
+        width: 100%;
+        height: 160px;
+        background: linear-gradient(135deg, #dbeafe 0%, #fef3c7 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 40px;
+      }
+
+      .direction-4 .template-info {
+        padding: 16px;
+      }
+
+      .direction-4 .template-info h4 {
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+
+      .direction-4 .template-info p {
+        font-size: 12px;
+        color: #64748b;
+      }
+
+      /* Direction 5: Developer-Focused */
+      .direction-5 {
+        background: #0f172a;
+        color: #e2e8f0;
+      }
+
+      .direction-5 .code-header {
+        background: #1e293b;
+        border-bottom: 1px solid #334155;
+        padding: 16px 24px;
+        font-family: 'SF Mono', Monaco, monospace;
+        font-size: 13px;
+      }
+
+      .direction-5 .panel-layout {
+        display: flex;
+        height: 700px;
+      }
+
+      .direction-5 .left-panel {
+        width: 300px;
+        background: #1e293b;
+        border-right: 1px solid #334155;
+        padding: 16px;
+      }
+
+      .direction-5 .main-panel {
+        flex: 1;
+        background: #0f172a;
+        padding: 24px;
+        font-family: 'SF Mono', Monaco, monospace;
+        font-size: 13px;
+        line-height: 1.6;
+      }
+
+      .direction-5 .code-line {
+        padding: 4px 0;
+        color: #94a3b8;
+      }
+
+      .direction-5 .keyword {
+        color: #f59e0b;
+      }
+
+      .direction-5 .string {
+        color: #10b981;
+      }
+
+      /* Direction 6: Balanced Hybrid */
+      .direction-6 .hybrid-layout {
+        display: flex;
+        height: 800px;
+      }
+
+      .direction-6 .collapsible-sidebar {
+        width: 200px;
+        background: #f8fafc;
+        border-right: 1px solid #e2e8f0;
+        transition: width 0.3s;
+      }
+
+      .direction-6 .mixed-view {
+        padding: 32px;
+      }
+
+      .direction-6 .view-toggle {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 24px;
+      }
+
+      .direction-6 .toggle-btn {
+        padding: 8px 16px;
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        transition: all 0.2s;
+      }
+
+      .direction-6 .toggle-btn.active {
+        background: #2563eb;
+        color: white;
+        border-color: #2563eb;
+      }
+
+      .comparison-tools {
+        position: fixed;
+        bottom: 32px;
+        right: 32px;
+        background: white;
+        padding: 16px;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      }
+
+      .comparison-tools h4 {
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #1e293b;
+      }
+
+      .comparison-tools button {
+        display: block;
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 8px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 12px;
+        transition: all 0.2s;
+      }
+
+      .comparison-tools button:hover {
+        background: #dbeafe;
+        border-color: #2563eb;
+        color: #2563eb;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="showcase-header">
+      <h1>Next-Step Design Directions</h1>
+      <p>
+        Explore 6 different visual approaches for the training injection
+        platform
+      </p>
+    </div>
+
+    <div class="navigation">
+      <button class="nav-btn active" onclick="showDirection(1)">
+        Direction 1: Clean Productivity
+      </button>
+      <button class="nav-btn" onclick="showDirection(2)">
+        Direction 2: Bold & Modern
+      </button>
+      <button class="nav-btn" onclick="showDirection(3)">
+        Direction 3: Enterprise Professional
+      </button>
+      <button class="nav-btn" onclick="showDirection(4)">
+        Direction 4: Canva-Inspired
+      </button>
+      <button class="nav-btn" onclick="showDirection(5)">
+        Direction 5: Developer-Focused
+      </button>
+      <button class="nav-btn" onclick="showDirection(6)">
+        Direction 6: Balanced Hybrid
+      </button>
+    </div>
+
+    <!-- Direction 1: Clean Productivity -->
+    <div class="direction-container direction-1 active">
+      <div class="direction-header">
+        <h2>Direction 1: Clean Productivity</h2>
+        <p class="description">
+          Minimal chrome maximizes content focus. Light borders and subtle
+          shadows create hierarchy without visual noise. Perfect for users who
+          want to focus on creating training scripts without distraction.
+        </p>
+        <div class="direction-tags">
+          <span class="tag">Minimal</span>
+          <span class="tag">Content-First</span>
+          <span class="tag">Low Distraction</span>
+          <span class="tag">Productivity</span>
+        </div>
+      </div>
+
+      <div class="mockup-frame">
+        <div class="app-layout">
+          <aside class="sidebar">
+            <ul class="sidebar-nav">
+              <li class="active">📋 Training Scripts</li>
+              <li>➕ Create Script</li>
+              <li>📊 Analytics</li>
+              <li>⚙️ Settings</li>
+              <li>👤 Account</li>
+            </ul>
+          </aside>
+
+          <main class="main-content">
+            <div class="page-header">
+              <h1>Training Scripts</h1>
+              <p class="subtitle">5 scripts · 3 published · 2 drafts</p>
+            </div>
+
+            <div class="action-bar">
+              <input
+                type="text"
+                class="search-box"
+                placeholder="Search scripts..."
+              />
+              <button class="btn-primary">+ New Script</button>
+            </div>
+
+            <div class="script-grid">
+              <div class="script-card">
+                <h3>Login Walkthrough</h3>
+                <p class="meta">Created 2 hours ago · Sarah Johnson</p>
+                <span class="status">Published</span>
+              </div>
+              <div class="script-card">
+                <h3>Dashboard Tour</h3>
+                <p class="meta">Created yesterday · Mike Chen</p>
+                <span class="status">Published</span>
+              </div>
+              <div class="script-card">
+                <h3>Payment Flow Guide</h3>
+                <p class="meta">Created 3 days ago · Sarah Johnson</p>
+                <span class="status" style="background: #fef3c7; color: #f59e0b"
+                  >Draft</span
+                >
+              </div>
+              <div class="script-card">
+                <h3>Profile Setup</h3>
+                <p class="meta">Created last week · Mike Chen</p>
+                <span class="status">Published</span>
+              </div>
+              <div class="script-card">
+                <h3>Settings Configuration</h3>
+                <p class="meta">Created 2 weeks ago · Sarah Johnson</p>
+                <span class="status" style="background: #fef3c7; color: #f59e0b"
+                  >Draft</span
+                >
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+
+    <!-- Direction 2: Bold & Modern -->
+    <div class="direction-container direction-2">
+      <div class="direction-header">
+        <h2>Direction 2: Bold & Modern</h2>
+        <p class="description">
+          Strong use of brand colors and elevated cards create visual impact.
+          Large previews and generous whitespace make this feel premium and
+          modern. Best for brands wanting to make a bold statement.
+        </p>
+        <div class="direction-tags">
+          <span class="tag">Bold Colors</span>
+          <span class="tag">Modern</span>
+          <span class="tag">Visual Impact</span>
+          <span class="tag">Premium Feel</span>
+        </div>
+      </div>
+
+      <div class="mockup-frame">
+        <div class="top-nav">
+          <div class="logo">Next-Step ⚡</div>
+          <ul class="nav-menu">
+            <li><a href="#">Scripts</a></li>
+            <li><a href="#">Analytics</a></li>
+            <li><a href="#">Settings</a></li>
+          </ul>
+        </div>
+
+        <div class="hero-section">
+          <h1>Your Training Scripts</h1>
+          <p>
+            Create, manage, and publish interactive training experiences in
+            minutes
+          </p>
+          <button class="btn-hero">+ Create New Script</button>
+        </div>
+
+        <div class="gallery-grid">
+          <div class="gallery-card">
+            <div class="card-image">🎯</div>
+            <div class="card-content">
+              <h3>Login Walkthrough</h3>
+              <p class="meta">Published · 2 hours ago</p>
+            </div>
+          </div>
+          <div class="gallery-card">
+            <div class="card-image">📊</div>
+            <div class="card-content">
+              <h3>Dashboard Tour</h3>
+              <p class="meta">Published · Yesterday</p>
+            </div>
+          </div>
+          <div class="gallery-card">
+            <div class="card-image">💳</div>
+            <div class="card-content">
+              <h3>Payment Flow Guide</h3>
+              <p class="meta">Draft · 3 days ago</p>
+            </div>
+          </div>
+          <div class="gallery-card">
+            <div class="card-image">👤</div>
+            <div class="card-content">
+              <h3>Profile Setup</h3>
+              <p class="meta">Published · Last week</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Direction 3: Enterprise Professional -->
+    <div class="direction-container direction-3">
+      <div class="direction-header">
+        <h2>Direction 3: Enterprise Professional</h2>
+        <p class="description">
+          Conservative styling prioritizes trust and data density. Table-based
+          layouts provide maximum information at a glance. Perfect for
+          enterprise customers who value efficiency and formality.
+        </p>
+        <div class="direction-tags">
+          <span class="tag">Enterprise</span>
+          <span class="tag">Data-Dense</span>
+          <span class="tag">Conservative</span>
+          <span class="tag">Professional</span>
+        </div>
+      </div>
+
+      <div class="mockup-frame">
+        <div class="enterprise-header">
+          <div class="logo">Next-Step Enterprise</div>
+          <div>
+            <button class="btn-primary">+ New Script</button>
+          </div>
+        </div>
+
+        <div style="padding: 32px">
+          <div class="page-header">
+            <h1>Training Scripts Dashboard</h1>
+            <p class="subtitle">
+              All training scripts across your organization
+            </p>
+          </div>
+
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Script Name</th>
+                <th>Author</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Views</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Login Walkthrough</strong></td>
+                <td>Sarah Johnson</td>
+                <td><span class="status">Published</span></td>
+                <td>2 hours ago</td>
+                <td>245</td>
+                <td><a href="#" style="color: #2563eb">Edit</a></td>
+              </tr>
+              <tr>
+                <td><strong>Dashboard Tour</strong></td>
+                <td>Mike Chen</td>
+                <td><span class="status">Published</span></td>
+                <td>Yesterday</td>
+                <td>189</td>
+                <td><a href="#" style="color: #2563eb">Edit</a></td>
+              </tr>
+              <tr>
+                <td><strong>Payment Flow Guide</strong></td>
+                <td>Sarah Johnson</td>
+                <td>
+                  <span
+                    class="status"
+                    style="background: #fef3c7; color: #f59e0b"
+                    >Draft</span
+                  >
+                </td>
+                <td>3 days ago</td>
+                <td>0</td>
+                <td><a href="#" style="color: #2563eb">Edit</a></td>
+              </tr>
+              <tr>
+                <td><strong>Profile Setup</strong></td>
+                <td>Mike Chen</td>
+                <td><span class="status">Published</span></td>
+                <td>Last week</td>
+                <td>412</td>
+                <td><a href="#" style="color: #2563eb">Edit</a></td>
+              </tr>
+              <tr>
+                <td><strong>Settings Configuration</strong></td>
+                <td>Sarah Johnson</td>
+                <td>
+                  <span
+                    class="status"
+                    style="background: #fef3c7; color: #f59e0b"
+                    >Draft</span
+                  >
+                </td>
+                <td>2 weeks ago</td>
+                <td>0</td>
+                <td><a href="#" style="color: #2563eb">Edit</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Direction 4: Canva-Inspired -->
+    <div class="direction-container direction-4">
+      <div class="direction-header">
+        <h2>Direction 4: Canva-Inspired Playful</h2>
+        <p class="description">
+          Bright colors, large previews, and friendly interactions create an
+          approachable creative tool. Template-style cards with visual previews
+          make this feel like a design platform.
+        </p>
+        <div class="direction-tags">
+          <span class="tag">Playful</span>
+          <span class="tag">Creative</span>
+          <span class="tag">Visual-First</span>
+          <span class="tag">Approachable</span>
+        </div>
+      </div>
+
+      <div class="mockup-frame">
+        <div class="playful-header">
+          <div
+            style="
+              background: white;
+              padding: 16px 48px;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            "
+          >
+            <div
+              style="
+                font-size: 24px;
+                font-weight: 700;
+                background: linear-gradient(135deg, #2563eb, #14b8a6);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+              "
+            >
+              Next-Step ✨
+            </div>
+            <button class="btn-primary">+ Create Magic</button>
+          </div>
+        </div>
+
+        <div style="padding: 32px">
+          <div
+            class="page-header"
+            style="text-align: center; margin-bottom: 40px"
+          >
+            <h1>Choose a template or start fresh</h1>
+            <p class="subtitle">
+              Create beautiful training experiences without any design skills
+            </p>
+          </div>
+
+          <div class="template-grid">
+            <div
+              class="template-card"
+              style="
+                background: linear-gradient(135deg, #dbeafe, #fef3c7);
+                padding: 32px;
+                text-align: center;
+              "
+            >
+              <div style="font-size: 48px; margin-bottom: 16px">✨</div>
+              <h4 style="font-size: 16px; color: #1e293b">
+                Start from Scratch
+              </h4>
+              <p style="font-size: 13px; color: #64748b">
+                Record your own flow
+              </p>
+            </div>
+
+            <div class="template-card">
+              <div class="template-preview">🎯</div>
+              <div class="template-info">
+                <h4>Login Tutorial</h4>
+                <p>Simple authentication guide</p>
+              </div>
+            </div>
+
+            <div class="template-card">
+              <div class="template-preview">📊</div>
+              <div class="template-info">
+                <h4>Dashboard Tour</h4>
+                <p>Show key features</p>
+              </div>
+            </div>
+
+            <div class="template-card">
+              <div class="template-preview">⚙️</div>
+              <div class="template-info">
+                <h4>Settings Walkthrough</h4>
+                <p>Configuration guide</p>
+              </div>
+            </div>
+
+            <div class="template-card">
+              <div class="template-preview">💳</div>
+              <div class="template-info">
+                <h4>Payment Flow</h4>
+                <p>Checkout process</p>
+              </div>
+            </div>
+
+            <div class="template-card">
+              <div class="template-preview">👥</div>
+              <div class="template-info">
+                <h4>Team Onboarding</h4>
+                <p>Collaborative features</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Direction 5: Developer-Focused -->
+    <div class="direction-container direction-5">
+      <div class="direction-header">
+        <h2>Direction 5: Developer-Focused Minimal</h2>
+        <p class="description">
+          Code-editor aesthetic with monospace touches and panel-based layouts.
+          Dark mode ready design appeals to technical users. Perfect for
+          developer tools or technical training platforms.
+        </p>
+        <div class="direction-tags">
+          <span class="tag">Technical</span>
+          <span class="tag">Minimal</span>
+          <span class="tag">Developer Tools</span>
+          <span class="tag">Dark Theme</span>
+        </div>
+      </div>
+
+      <div class="mockup-frame direction-5">
+        <div class="code-header">
+          <span style="color: #14b8a6">next-step</span>
+          <span style="color: #64748b">~/training-scripts</span>
+        </div>
+
+        <div class="panel-layout">
+          <aside class="left-panel">
+            <div
+              style="
+                font-size: 11px;
+                color: #64748b;
+                margin-bottom: 12px;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+              "
+            >
+              Scripts
+            </div>
+            <div
+              style="
+                margin-bottom: 8px;
+                padding: 8px;
+                background: #334155;
+                border-radius: 4px;
+                cursor: pointer;
+              "
+            >
+              <div style="font-size: 13px; color: #e2e8f0">
+                login-walkthrough.json
+              </div>
+              <div style="font-size: 11px; color: #64748b">
+                5 steps · Published
+              </div>
+            </div>
+            <div
+              style="
+                margin-bottom: 8px;
+                padding: 8px;
+                border-radius: 4px;
+                cursor: pointer;
+              "
+            >
+              <div style="font-size: 13px; color: #94a3b8">
+                dashboard-tour.json
+              </div>
+              <div style="font-size: 11px; color: #64748b">
+                8 steps · Published
+              </div>
+            </div>
+            <div
+              style="
+                margin-bottom: 8px;
+                padding: 8px;
+                border-radius: 4px;
+                cursor: pointer;
+              "
+            >
+              <div style="font-size: 13px; color: #94a3b8">
+                payment-flow.json
+              </div>
+              <div style="font-size: 11px; color: #64748b">3 steps · Draft</div>
+            </div>
+          </aside>
+
+          <main class="main-panel">
+            <div
+              style="
+                margin-bottom: 24px;
+                padding-bottom: 16px;
+                border-bottom: 1px solid #334155;
+              "
+            >
+              <div style="font-size: 18px; color: #e2e8f0; margin-bottom: 4px">
+                login-walkthrough.json
+              </div>
+              <div style="font-size: 12px; color: #64748b">
+                Modified 2 hours ago · 5 steps · Published
+              </div>
+            </div>
+
+            <div class="code-line"><span style="color: #64748b">{</span></div>
+            <div class="code-line">
+              <span class="keyword">"scriptId"</span>:
+              <span class="string">"login-001"</span>,
+            </div>
+            <div class="code-line">
+              <span class="keyword">"title"</span>:
+              <span class="string">"Login Walkthrough"</span>,
+            </div>
+            <div class="code-line"><span class="keyword">"steps"</span>: [</div>
+            <div class="code-line">{</div>
+            <div class="code-line">
+              <span class="keyword">"stepNumber"</span>: 1,
+            </div>
+            <div class="code-line">
+              <span class="keyword">"description"</span>:
+              <span class="string">"Enter your email"</span>,
+            </div>
+            <div class="code-line">
+              <span class="keyword">"element"</span>:
+              <span class="string">"#email-input"</span>,
+            </div>
+            <div class="code-line">
+              <span class="keyword">"action"</span>:
+              <span class="string">"highlight"</span>
+            </div>
+            <div class="code-line">},</div>
+            <div class="code-line"><span style="color: #64748b">...</span></div>
+            <div class="code-line">]</div>
+            <div class="code-line"><span style="color: #64748b">}</span></div>
+
+            <div
+              style="
+                margin-top: 32px;
+                padding-top: 16px;
+                border-top: 1px solid #334155;
+              "
+            >
+              <button
+                style="
+                  padding: 10px 20px;
+                  background: #2563eb;
+                  color: white;
+                  border: none;
+                  border-radius: 4px;
+                  cursor: pointer;
+                  font-family: inherit;
+                  font-size: 13px;
+                "
+              >
+                Publish Script
+              </button>
+              <button
+                style="
+                  padding: 10px 20px;
+                  background: transparent;
+                  color: #64748b;
+                  border: 1px solid #334155;
+                  border-radius: 4px;
+                  cursor: pointer;
+                  font-family: inherit;
+                  font-size: 13px;
+                  margin-left: 8px;
+                "
+              >
+                Preview
+              </button>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+
+    <!-- Direction 6: Balanced Hybrid -->
+    <div class="direction-container direction-6">
+      <div class="direction-header">
+        <h2>Direction 6: Balanced Hybrid</h2>
+        <p class="description">
+          Best of productivity and modern aesthetics. Collapsible sidebar, mixed
+          views, and adaptive density controls let users customize their
+          experience. Versatile for diverse user preferences.
+        </p>
+        <div class="direction-tags">
+          <span class="tag">Flexible</span>
+          <span class="tag">Balanced</span>
+          <span class="tag">Adaptive</span>
+          <span class="tag">User Choice</span>
+        </div>
+      </div>
+
+      <div class="mockup-frame">
+        <div class="hybrid-layout">
+          <aside class="collapsible-sidebar">
+            <div style="padding: 24px 16px">
+              <div
+                style="
+                  font-size: 20px;
+                  font-weight: 700;
+                  color: #2563eb;
+                  margin-bottom: 24px;
+                "
+              >
+                NS
+              </div>
+              <ul class="sidebar-nav" style="list-style: none">
+                <li class="active">Scripts</li>
+                <li>Analytics</li>
+                <li>Settings</li>
+              </ul>
+            </div>
+          </aside>
+
+          <main style="flex: 1; background: white">
+            <div style="padding: 32px">
+              <div class="page-header">
+                <h1>Training Scripts</h1>
+                <p class="subtitle">Manage your training content</p>
+              </div>
+
+              <div class="mixed-view">
+                <div class="view-toggle">
+                  <button class="toggle-btn active">📋 List</button>
+                  <button class="toggle-btn">🎴 Cards</button>
+                  <button class="toggle-btn">📊 Table</button>
+                  <button class="btn-primary" style="margin-left: auto">
+                    + New Script
+                  </button>
+                </div>
+
+                <div
+                  style="
+                    background: white;
+                    border: 1px solid #e2e8f0;
+                    border-radius: 8px;
+                    margin-bottom: 12px;
+                    padding: 20px;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                  "
+                  onmouseover="this.style.borderColor='#2563EB'"
+                  onmouseout="this.style.borderColor='#E2E8F0'"
+                >
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: start;
+                    "
+                  >
+                    <div>
+                      <h3
+                        style="
+                          font-size: 16px;
+                          font-weight: 600;
+                          margin-bottom: 8px;
+                        "
+                      >
+                        Login Walkthrough
+                      </h3>
+                      <p
+                        style="
+                          font-size: 13px;
+                          color: #64748b;
+                          margin-bottom: 8px;
+                        "
+                      >
+                        5 steps · Last edited 2 hours ago by Sarah Johnson
+                      </p>
+                      <span class="status">Published</span>
+                    </div>
+                    <div style="font-size: 32px">🎯</div>
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    background: white;
+                    border: 1px solid #e2e8f0;
+                    border-radius: 8px;
+                    margin-bottom: 12px;
+                    padding: 20px;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                  "
+                  onmouseover="this.style.borderColor='#2563EB'"
+                  onmouseout="this.style.borderColor='#E2E8F0'"
+                >
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: start;
+                    "
+                  >
+                    <div>
+                      <h3
+                        style="
+                          font-size: 16px;
+                          font-weight: 600;
+                          margin-bottom: 8px;
+                        "
+                      >
+                        Dashboard Tour
+                      </h3>
+                      <p
+                        style="
+                          font-size: 13px;
+                          color: #64748b;
+                          margin-bottom: 8px;
+                        "
+                      >
+                        8 steps · Last edited yesterday by Mike Chen
+                      </p>
+                      <span class="status">Published</span>
+                    </div>
+                    <div style="font-size: 32px">📊</div>
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    background: white;
+                    border: 1px solid #e2e8f0;
+                    border-radius: 8px;
+                    padding: 20px;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                  "
+                  onmouseover="this.style.borderColor='#2563EB'"
+                  onmouseout="this.style.borderColor='#E2E8F0'"
+                >
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: start;
+                    "
+                  >
+                    <div>
+                      <h3
+                        style="
+                          font-size: 16px;
+                          font-weight: 600;
+                          margin-bottom: 8px;
+                        "
+                      >
+                        Payment Flow Guide
+                      </h3>
+                      <p
+                        style="
+                          font-size: 13px;
+                          color: #64748b;
+                          margin-bottom: 8px;
+                        "
+                      >
+                        3 steps · Last edited 3 days ago by Sarah Johnson
+                      </p>
+                      <span
+                        class="status"
+                        style="background: #fef3c7; color: #f59e0b"
+                        >Draft</span
+                      >
+                    </div>
+                    <div style="font-size: 32px">💳</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+
+    <div class="comparison-tools">
+      <h4>Comparison Tools</h4>
+      <button onclick="alert('Side-by-side comparison feature')">
+        📊 Compare Directions
+      </button>
+      <button onclick="alert('Export favorites feature')">
+        ⭐ Save Favorites
+      </button>
+      <button onclick="alert('Share feedback feature')">
+        💬 Share Feedback
+      </button>
+    </div>
+
+    <script>
+      function showDirection(num) {
+        // Hide all directions
+        document.querySelectorAll('.direction-container').forEach((el) => {
+          el.classList.remove('active');
+        });
+
+        // Remove active state from all buttons
+        document.querySelectorAll('.nav-btn').forEach((btn) => {
+          btn.classList.remove('active');
+        });
+
+        // Show selected direction
+        document.querySelector('.direction-' + num).classList.add('active');
+
+        // Activate corresponding button
+        document.querySelectorAll('.nav-btn')[num - 1].classList.add('active');
+      }
+    </script>
+  </body>
+</html>

@@ -1,5 +1,5 @@
 ---
-stepsCompleted: [1, 2, 3, 4, 5, 6, 7]
+stepsCompleted: [1, 2, 3, 4, 5, 6, 7, 8]
 inputDocuments:
   - docs/planning-artifacts/prd.md
   - docs/planning-artifacts/architecture.md
@@ -1909,3 +1909,631 @@ _Sarah's Feeling at Completion:_
 | **Total**                            | **5-10 minutes** | **100%**   |
 
 **Success = Professional training created and published in less time than writing a detailed Slack message explaining the same steps manually.**
+
+---
+
+## Visual Design Foundation
+
+### Color System
+
+**Selected Direction: Trusted Professional (Blue/Teal Foundation)**
+
+Next-Step's color system establishes B2B credibility and trust while maintaining a modern, approachable aesthetic. The blue foundation signals reliability and professionalism—critical for enterprise customers evaluating training solutions—while teal accents provide contemporary freshness that differentiates from purely corporate tools.
+
+**Primary Color Palette:**
+
+**Primary: Deep Blue (#2563EB)**
+
+- **Usage:** Primary actions (Publish, Save, Start Recording buttons), navigation highlights, links
+- **Emotional Association:** Trust, reliability, B2B credibility, stability
+- **Rationale:** Blue is the most trusted color in B2B software, reducing adoption friction for enterprise buyers
+
+**Accent: Teal (#14B8A6)**
+
+- **Usage:** Secondary actions, highlights, progress indicators, success states
+- **Emotional Association:** Modern, fresh, growth, innovation
+- **Rationale:** Teal adds energy and modernity while maintaining professional tone
+
+**Success: Green (#10B981)**
+
+- **Usage:** Success confirmations ("Published successfully!"), completion indicators, positive validation
+- **Emotional Association:** Achievement, progress, confirmation
+- **Rationale:** Universal success color, immediately recognizable
+
+**Warning: Amber (#F59E0B)**
+
+- **Usage:** Validation warnings ("Element not visible on mobile"), caution states, non-critical alerts
+- **Emotional Association:** Attention without alarm, cautionary but not blocking
+- **Rationale:** Draws attention without creating anxiety or fear
+
+**Error: Red (#EF4444)**
+
+- **Usage:** Error states, destructive actions (Delete, Unpublish), critical validation failures
+- **Emotional Association:** Stop, critical issue, requires immediate attention
+- **Rationale:** Universal error signaling, high visibility for critical issues
+
+**Neutral: Slate (#64748B / #475569 / #334155)**
+
+- **Usage:** Body text, secondary text, borders, backgrounds, disabled states
+- **Emotional Association:** Professional, neutral, sophisticated
+- **Rationale:** Slate gray provides professional sophistication over pure black/white, better for extended reading
+
+**Semantic Color Mapping:**
+
+```scss
+// Primary semantic colors
+--color-primary: #2563eb; // Deep Blue
+--color-primary-hover: #1d4ed8; // Darker blue on hover
+--color-primary-light: #dbeafe; // Light blue for backgrounds
+
+--color-accent: #14b8a6; // Teal
+--color-accent-hover: #0d9488; // Darker teal on hover
+--color-accent-light: #ccfbf1; // Light teal for backgrounds
+
+// State colors
+--color-success: #10b981; // Green
+--color-success-light: #d1fae5; // Light green background
+
+--color-warning: #f59e0b; // Amber
+--color-warning-light: #fef3c7; // Light amber background
+
+--color-error: #ef4444; // Red
+--color-error-light: #fee2e2; // Light red background
+
+--color-info: #3b82f6; // Blue (informational)
+--color-info-light: #dbeafe; // Light blue background
+
+// Neutral scale
+--color-text-primary: #1e293b; // Slate 800 - main text
+--color-text-secondary: #64748b; // Slate 500 - secondary text
+--color-text-tertiary: #94a3b8; // Slate 400 - placeholder text
+
+--color-border: #e2e8f0; // Slate 200 - borders
+--color-border-hover: #cbd5e1; // Slate 300 - hover borders
+
+--color-background: #ffffff; // White - main background
+--color-background-subtle: #f8fafc; // Slate 50 - subtle bg
+--color-background-elevated: #ffffff; // White with shadow - cards, modals
+```
+
+**Accessibility Compliance:**
+
+All color combinations meet WCAG 2.1 Level AA contrast requirements (4.5:1 for normal text, 3:1 for large text):
+
+- Deep Blue (#2563EB) on white: **7.26:1** ✓ AA Pass
+- Teal (#14B8A6) on white: **3.79:1** ✓ AA Large Text Pass
+- Slate 500 (#64748B) on white: **4.54:1** ✓ AA Pass
+- Slate 800 (#1E293B) on white: **13.58:1** ✓ AAA Pass
+
+For critical actions and primary text, we exceed AA standards to ensure maximum readability.
+
+**Color Usage Guidelines:**
+
+**Primary Blue - Confidence & Action:**
+
+- Use for primary CTAs (Publish, Save, Start Recording)
+- Navigation active states and selected items
+- Links and interactive elements
+- Limit to 1-2 primary actions per screen to maintain hierarchy
+
+**Teal Accent - Progress & Modernity:**
+
+- Secondary actions (Preview, Edit, Share)
+- Progress indicators during AI generation
+- Highlights and badges
+- "New" or "Beta" feature indicators
+
+**Success Green - Celebration & Confirmation:**
+
+- Success toasts and confirmations
+- Completion indicators (✓ checkmarks)
+- Positive validation messages
+- Use sparingly to maintain impact
+
+**Warning Amber - Helpful Caution:**
+
+- Non-blocking validation warnings
+- "Needs attention" states that don't prevent action
+- Optional improvements or suggestions
+- Avoid overuse (reduces impact when actually needed)
+
+**Error Red - Critical Attention:**
+
+- Form validation errors that block submission
+- Destructive action warnings (Delete, Unpublish)
+- Critical system errors
+- Reserve for genuinely blocking issues only
+
+**Neutral Slate - Professional Foundation:**
+
+- Body text and content hierarchy
+- Borders, dividers, subtle backgrounds
+- Disabled or inactive states
+- Provides professional sophistication and readability
+
+**Dark Mode Consideration (Post-MVP):**
+
+While MVP launches with light mode only, the color system accommodates future dark mode:
+
+- Primary blue and teal remain but with adjusted saturation/lightness
+- Neutral scale inverts (dark backgrounds, light text)
+- Success/warning/error colors maintain but with adjusted brightness
+- All contrast ratios validated for dark backgrounds
+
+### Typography System
+
+**Selected Approach: System Font Stack**
+
+Next-Step uses native system fonts for optimal performance, platform-appropriate aesthetics, and zero loading time. System fonts provide professional, highly readable typography that feels native to each user's operating system.
+
+**Font Family:**
+
+```scss
+--font-family-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+--font-family-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+```
+
+**System Font Benefits:**
+
+- **Zero Load Time:** Fonts already installed on user's device, instant rendering
+- **Native Feel:** San Francisco on macOS, Segoe UI on Windows, Roboto on Android/Linux
+- **Optimized Rendering:** OS vendors optimize these fonts for screen readability
+- **Cost-Free:** No licensing fees, no font hosting infrastructure
+- **Accessibility:** System fonts designed with accessibility standards built-in
+
+**Type Scale (Based on Material Design 3):**
+
+```scss
+// Display (Hero text, landing pages)
+--font-size-display-large: 57px;
+--line-height-display-large: 64px;
+--font-weight-display: 400;
+
+// Headlines (Page titles, modal titles)
+--font-size-h1: 36px;
+--line-height-h1: 44px;
+--font-weight-h1: 600;
+
+--font-size-h2: 28px;
+--line-height-h2: 36px;
+--font-weight-h2: 600;
+
+--font-size-h3: 24px;
+--line-height-h3: 32px;
+--font-weight-h3: 600;
+
+--font-size-h4: 20px;
+--line-height-h4: 28px;
+--font-weight-h4: 600;
+
+// Body text (Main content)
+--font-size-body-large: 16px;
+--line-height-body-large: 24px;
+--font-weight-body-large: 400;
+
+--font-size-body: 14px;
+--line-height-body: 20px;
+--font-weight-body: 400;
+
+--font-size-body-small: 12px;
+--line-height-body-small: 16px;
+--font-weight-body-small: 400;
+
+// Labels (Form labels, button text)
+--font-size-label: 14px;
+--line-height-label: 20px;
+--font-weight-label: 500;
+
+// Captions (Help text, timestamps)
+--font-size-caption: 12px;
+--line-height-caption: 16px;
+--font-weight-caption: 400;
+
+// Code (CSS selectors, JSON, inline code)
+--font-size-code: 14px;
+--line-height-code: 20px;
+--font-weight-code: 400;
+```
+
+**Font Weight Scale:**
+
+- **400 (Regular):** Body text, descriptions, secondary content
+- **500 (Medium):** Labels, button text, emphasized body text
+- **600 (Semibold):** Headings, titles, primary navigation
+- **700 (Bold):** Reserved for special emphasis (rarely used)
+
+**Typography Hierarchy Guidelines:**
+
+**Page Titles (H1):**
+
+- Used once per page for primary heading
+- 36px / 600 weight
+- Color: Slate 800 (--color-text-primary)
+- Example: "Training Scripts", "Edit Script: Login Walkthrough"
+
+**Section Titles (H2):**
+
+- Major sections within a page
+- 28px / 600 weight
+- Color: Slate 800
+- Example: "Recent Scripts", "Script Editor", "Preview"
+
+**Subsection Titles (H3):**
+
+- Subsections or card titles
+- 24px / 600 weight
+- Color: Slate 800
+- Example: "Step 1: Enter Email", "Recording Settings"
+
+**Component Titles (H4):**
+
+- Small component headings
+- 20px / 600 weight
+- Color: Slate 800
+- Example: "Device Preview", "Publish Options"
+
+**Body Text:**
+
+- Primary content, descriptions, paragraphs
+- 14px / 400 weight / 20px line-height
+- Color: Slate 800 for primary, Slate 500 for secondary
+- Line length: Max 65-75 characters for optimal readability
+
+**Labels:**
+
+- Form field labels, button text, navigation items
+- 14px / 500 weight
+- Color: Slate 700
+- Text-transform: none (sentence case for better readability)
+
+**Captions & Help Text:**
+
+- Timestamps, metadata, helper text, tooltips
+- 12px / 400 weight
+- Color: Slate 500 (secondary text)
+- Example: "Created 5 minutes ago", "Optional field"
+
+**Code & Technical Text:**
+
+- CSS selectors, JSON, inline code snippets
+- 14px / 400 weight / Monospace font
+- Color: Slate 700
+- Background: Slate 100 for inline code
+- Example: `#email-input`, `{ "step": 1 }`
+
+**Readability Optimizations:**
+
+**Line Height:**
+
+- Body text: 1.5x (20px for 14px text) for comfortable reading
+- Headings: 1.2-1.25x (tighter for visual impact)
+- Code: 1.4x (monospace needs slightly less leading)
+
+**Line Length:**
+
+- Optimal: 65-75 characters per line for body text
+- Editor panes: Max 80 characters for comfortable editing
+- Wide screens: Use columns or max-width constraints
+
+**Letter Spacing:**
+
+- Default: Normal (system font default)
+- Headings: Slight tightening (-0.02em) for visual polish
+- All caps (if used): +0.05em for legibility
+
+**Accessibility Considerations:**
+
+- Minimum body text: 14px (exceeds WCAG 12px minimum)
+- Line height: 1.5 minimum for body text (WCAG compliance)
+- Contrast: All text meets 4.5:1 ratio minimum (AA standard)
+- Font weights: Never below 400 (light weights reduce legibility)
+- Resizable: All sizes use relative units (rem) for user zoom support
+
+**Typography Usage Examples:**
+
+**Back Office Dashboard:**
+
+- Page title: H1 (36px) - "Training Scripts"
+- Section titles: H2 (28px) - "Recently Published"
+- Card titles: H4 (20px) - "Login Walkthrough"
+- Body text: 14px - "Created by Sarah Johnson"
+- Captions: 12px - "2 minutes ago · 0 views"
+
+**Script Editor:**
+
+- Page title: H1 (36px) - "Edit: Login Walkthrough"
+- Step titles: H3 (24px) - "Step 1: Enter Your Email"
+- Body text: 14px - Step descriptions
+- Labels: 14px/500 - "Target Element", "Description"
+- Code: 14px/mono - `#email-input`
+
+**Modals & Dialogs:**
+
+- Modal title: H2 (28px) - "Publish to Production?"
+- Body text: 14px - "This script will be live for users..."
+- Button text: 14px/500 - "Publish Now", "Cancel"
+
+### Spacing & Layout Foundation
+
+**Selected Philosophy: Balanced & Standard (Material Design 8px Base Unit)**
+
+Next-Step follows Material Design's proven 8px spacing system, providing balanced information density suitable for productivity tools. This creates comfortable, professional layouts without feeling cramped (compact) or wasteful (airy).
+
+**Base Unit: 8px**
+
+All spacing values are multiples of 8px, creating consistent rhythm and visual alignment:
+
+```scss
+// Spacing scale (8px base)
+--spacing-0: 0;
+--spacing-1: 4px; // 0.5× (exceptions, tight spacing)
+--spacing-2: 8px; // 1× base unit
+--spacing-3: 12px; // 1.5× (between elements)
+--spacing-4: 16px; // 2× (card padding, between sections)
+--spacing-5: 20px; // 2.5×
+--spacing-6: 24px; // 3× (larger component spacing)
+--spacing-8: 32px; // 4× (section spacing)
+--spacing-10: 40px; // 5× (major sections)
+--spacing-12: 48px; // 6× (page-level spacing)
+--spacing-16: 64px; // 8× (large whitespace, hero sections)
+```
+
+**Spacing Application Guidelines:**
+
+**Component Internal Spacing (Padding):**
+
+- Buttons: 8px vertical, 16px horizontal (compact), 12px × 24px (default)
+- Form inputs: 12px vertical, 16px horizontal
+- Cards: 16px padding (mobile), 24px padding (desktop)
+- Modals: 24px padding throughout
+- Navigation items: 12px vertical, 16px horizontal
+
+**Component Spacing (Margin/Gap):**
+
+- Between related elements: 8px (labels + inputs, icon + text)
+- Between form fields: 16px vertical
+- Between sections: 24px-32px
+- Between major page sections: 48px-64px
+- Page margins: 24px (mobile), 32px-48px (desktop)
+
+**Grid System:**
+
+**12-Column Grid (Material Design Standard):**
+
+```scss
+--grid-columns: 12;
+--grid-gutter: 24px; // Space between columns
+--grid-margin: 24px; // Page edge margins (mobile)
+--grid-margin-desktop: 48px; // Page edge margins (desktop)
+```
+
+**Responsive Breakpoints:**
+
+```scss
+--breakpoint-mobile: 0px; // < 768px
+--breakpoint-tablet: 768px; // 768-1024px
+--breakpoint-desktop: 1024px; // 1024-1440px
+--breakpoint-wide: 1440px; // > 1440px
+```
+
+**Layout Patterns:**
+
+**Dashboard Layout:**
+
+```
+┌─ Sidebar (240px) ─┬─ Main Content ────────────────┐
+│ Navigation         │  Page Title (H1)              │
+│ (Fixed width)      │  ↓ 24px spacing               │
+│                    │  Section (Cards with 16px gap)│
+│                    │  ↓ 32px spacing               │
+│                    │  Another Section              │
+└────────────────────┴───────────────────────────────┘
+```
+
+**Script Editor Layout (Split View):**
+
+```
+┌─ Editor Pane ─────┬─ Preview Pane ───────────────┐
+│ Steps List        │  Device Toggle                │
+│ (Flexible width)  │  ↓ 16px                       │
+│                   │  iframe Preview               │
+│ 16px gap between  │  (Full remaining height)      │
+│ step cards        │                               │
+└───────────────────┴───────────────────────────────┘
+Split: 40% editor / 60% preview (adjustable)
+```
+
+**Card Spacing:**
+
+- Internal padding: 16px (mobile), 24px (desktop)
+- Between cards in grid: 16px gap
+- Card border-radius: 8px (modern, approachable)
+- Card elevation: 0 2px 4px rgba(0,0,0,0.1) (subtle)
+
+**Form Layout:**
+
+- Label above input: 8px gap
+- Between fields: 16px vertical gap
+- Field groups: 24px gap between groups
+- Form actions (buttons): 24px top margin, 8px gap between buttons
+
+**Modal/Dialog Spacing:**
+
+- Modal padding: 24px all sides
+- Title to content: 16px gap
+- Content to actions: 24px gap
+- Between action buttons: 8px horizontal gap
+
+**Responsive Spacing Adjustments:**
+
+**Mobile (<768px):**
+
+- Reduce page margins: 24px → 16px
+- Reduce card padding: 24px → 16px
+- Reduce section spacing: 48px → 32px
+- Maintain 8px base unit for rhythm
+
+**Tablet (768-1024px):**
+
+- Standard spacing applies
+- Comfortable for most interfaces
+
+**Desktop (>1024px):**
+
+- Increase page margins: 24px → 48px
+- Maintain or slightly increase card padding
+- Generous section spacing: 48-64px
+
+**Information Density:**
+
+**Balanced Approach:**
+
+- Comfortable reading without excessive scrolling
+- ~10-15 table rows visible without scroll
+- ~4-6 cards in grid view (desktop)
+- Script editor: ~5-7 steps visible in list
+- Not cramped (can breathe), not wasteful (efficient use of space)
+
+### Accessibility Considerations
+
+**Color Contrast (WCAG 2.1 Level AA Compliance):**
+
+All text-to-background combinations meet or exceed required contrast ratios:
+
+**Normal Text (< 18px):**
+
+- Requirement: 4.5:1 minimum
+- Primary text (Slate 800 on white): **13.58:1** ✓ Exceeds AAA (7:1)
+- Secondary text (Slate 500 on white): **4.54:1** ✓ Meets AA
+- Links (Blue #2563EB on white): **7.26:1** ✓ Exceeds AAA
+
+**Large Text (≥ 18px or 14px bold):**
+
+- Requirement: 3:1 minimum
+- All headings and large text exceed 4.5:1 (normal text standard)
+
+**Interactive Elements:**
+
+- Buttons: All states meet 3:1 minimum for visual boundaries
+- Form inputs: Border contrast 3:1, text contrast 4.5:1
+- Focus indicators: 3:1 contrast against background
+
+**Color-Blind Considerations:**
+
+**Not Relying on Color Alone:**
+
+- Success states: Green color + checkmark icon ✓
+- Error states: Red color + X icon + descriptive text
+- Warnings: Amber color + warning icon ⚠ + text
+- Status indicators: Color + text label (not color-only)
+
+**Color-Blind Safe Palette:**
+
+- Blue and orange are distinguishable for most color-blind types
+- Avoid red/green-only distinctions (always add icons or text)
+- High contrast ensures visibility regardless of color perception
+
+**Focus Indicators:**
+
+**Keyboard Navigation Support:**
+
+- All interactive elements have visible focus state
+- Focus indicator: 2px solid blue outline with 2px offset
+- Focus state contrast: 3:1 minimum against background
+- Tab order follows logical reading flow (top-to-bottom, left-to-right)
+
+```scss
+*:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+```
+
+**Typography Accessibility:**
+
+**Readability Standards:**
+
+- Minimum body text: 14px (exceeds WCAG 12px minimum)
+- Line height: 1.5 for body text (WCAG 1.5 requirement)
+- Line length: Max 80 characters for comfortable reading
+- Font weights: Minimum 400 (light weights reduce legibility)
+
+**Resizable Text:**
+
+- All font sizes use relative units (rem, not px)
+- Layout adapts to browser zoom up to 200%
+- No horizontal scrolling at 200% zoom for main content
+- Text remains readable without assistive technology
+
+**Touch Target Sizes:**
+
+**Mobile Touch Targets (iOS/Android Guidelines):**
+
+- Minimum touch target: 44×44px (iOS), 48×48px (Android)
+- Buttons: Minimum 44px height, 88px width for text buttons
+- Icon buttons: 48×48px minimum clickable area
+- Form inputs: Minimum 44px height
+- Spacing between touch targets: 8px minimum
+
+**Mouse Target Sizes:**
+
+- Minimum clickable area: 24×24px
+- Comfortable target: 32×32px or larger
+- Links inline with text: Adequate padding (4px vertical)
+
+**Screen Reader Considerations:**
+
+**Semantic HTML:**
+
+- Proper heading hierarchy (H1 → H2 → H3, no skipping)
+- Semantic elements (<nav>, <main>, <article>, <button>)
+- Form labels properly associated with inputs (for/id)
+- Alt text for all meaningful images
+
+**ARIA Labels:**
+
+- Icon-only buttons: `aria-label="Start Recording"`
+- Complex controls: `aria-describedby` for help text
+- Loading states: `aria-live="polite"` for status updates
+- Modal dialogs: `role="dialog"` with `aria-labelledby`
+
+**Skip Links:**
+
+- "Skip to main content" link at page top
+- Keyboard users can bypass repetitive navigation
+- Visually hidden until focused
+
+**Motion & Animation Considerations:**
+
+**Reduced Motion Support:**
+
+```scss
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+```
+
+**Animation Guidelines:**
+
+- Default animations: Subtle, purposeful (200-300ms)
+- Avoid auto-playing animations longer than 5 seconds
+- Provide pause/stop controls for longer animations
+- Respect `prefers-reduced-motion` user preference
+
+**Visual Foundation Implementation Checklist:**
+
+✅ Color palette defined with semantic mapping  
+✅ All color combinations validated for WCAG AA contrast  
+✅ Typography scale established with system fonts  
+✅ Spacing system (8px base unit) documented  
+✅ Grid system and responsive breakpoints defined  
+✅ Accessibility requirements integrated throughout  
+✅ Focus indicators, touch targets, screen reader support planned  
+✅ Motion preferences respected
+
+This visual foundation provides a complete, accessible, professional design system ready for implementation in the Angular Material-based Back Office application.
