@@ -1,0 +1,47 @@
+<h2 mat-dialog-title>
+  {{ mode === 'create' ? 'Create New Project' : 'Edit Project' }}
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <mat-form-field appearance="outline" style="width: 100%;">
+      <mat-label>Project Name</mat-label>
+      <input
+        matInput
+        formControlName="name"
+        placeholder="Enter project name"
+        required
+      />
+      @if (form.controls.name.hasError('required')) {
+        <mat-error>Name is required</mat-error>
+      }
+      @if (form.controls.name.hasError('maxlength')) {
+        <mat-error>Name must not exceed 255 characters</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="width: 100%;">
+      <mat-label>Description</mat-label>
+      <textarea
+        matInput
+        formControlName="description"
+        placeholder="Enter project description (optional)"
+        rows="4"
+      ></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="dialogRef.close(false)" [disabled]="loading()">
+    Cancel
+  </button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onSubmit()"
+    [disabled]="form.invalid || loading()"
+  >
+    {{ mode === 'create' ? 'Create' : 'Save' }}
+  </button>
+</mat-dialog-actions>

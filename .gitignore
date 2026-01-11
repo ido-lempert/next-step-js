@@ -13,3 +13,7 @@ yarn-error.log*
 
 vitest.config.*.timestamp*
 /.nx/
+
+# Build output
+/dist
+/apps/*/dist
