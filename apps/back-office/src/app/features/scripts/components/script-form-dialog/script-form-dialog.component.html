@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>{{ dialogTitle }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <mat-dialog-content>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Script Name</mat-label>
+      <input matInput formControlName="name" required />
+      @if (form.get('name')?.hasError('required')) {
+        <mat-error>Script name is required</mat-error>
+      }
+      @if (form.get('name')?.hasError('maxlength')) {
+        <mat-error>Script name must not exceed 255 characters</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Script Type</mat-label>
+      <mat-select formControlName="type" required>
+        <mat-option value="walkthrough">Walkthrough</mat-option>
+        <mat-option value="modal">Modal</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="onCancel()" [disabled]="loading()">
+      Cancel
+    </button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || loading()">
+      {{ isEditMode ? 'Update' : 'Create' }}
+    </button>
+  </mat-dialog-actions>
+</form>

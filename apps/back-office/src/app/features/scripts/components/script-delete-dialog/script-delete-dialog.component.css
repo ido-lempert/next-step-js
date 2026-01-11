@@ -1,0 +1,9 @@
+mat-dialog-content {
+  padding: 20px 24px;
+}
+
+.warning {
+  color: #f44336;
+  font-weight: 500;
+  margin-top: 16px;
+}

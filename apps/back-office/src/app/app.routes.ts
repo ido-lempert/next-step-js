@@ -20,4 +20,20 @@ export const appRoutes: Route[] = [
         (m) => m.ProjectDetailComponent
       ),
   },
+  {
+    path: 'products/:productId/scripts',
+    loadComponent: () =>
+      import('./features/scripts/components/script-list/script-list.component').then(
+        (m) => m.ScriptListComponent
+      ),
+    data: { prerender: false },
+  },
+  {
+    path: 'scripts/:id/editor',
+    loadComponent: () =>
+      import('./features/scripts/components/script-editor/script-editor.component').then(
+        (m) => m.ScriptEditorComponent
+      ),
+    data: { prerender: false },
+  },
 ];

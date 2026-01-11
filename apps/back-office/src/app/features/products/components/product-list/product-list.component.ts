@@ -1,5 +1,6 @@
 import { Component, OnInit, signal, inject, input, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -29,6 +30,7 @@ export class ProductListComponent implements OnInit {
   private readonly productService = inject(ProductService);
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly router = inject(Router);
 
   projectId = input.required<string>();
   
@@ -107,5 +109,9 @@ export class ProductListComponent implements OnInit {
         this.loadProducts();
       }
     });
+  }
+
+  viewScripts(product: Product): void {
+    this.router.navigate(['/products', product.id, 'scripts']);
   }
 }

@@ -1,0 +1,123 @@
+.script-editor-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.title-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.title-section h2 {
+  margin: 0;
+}
+
+.type-badge {
+  background-color: #e0e0e0;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 0.875rem;
+}
+
+.loading-container,
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  text-align: center;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 48px;
+}
+
+.empty-state mat-icon {
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
+  color: #ccc;
+}
+
+.steps-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.step-card {
+  position: relative;
+  cursor: move;
+}
+
+.step-card.cdk-drag-preview {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.step-card.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.steps-container.cdk-drop-list-dragging .step-card:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.drag-handle {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: grab;
+  color: #999;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.step-card mat-card-header {
+  margin-left: 40px;
+}
+
+.step-card mat-card-content {
+  margin-left: 40px;
+}
+
+.step-card mat-card-actions {
+  margin-left: 40px;
+}
+
+.step-number {
+  color: #666;
+  font-weight: 500;
+  margin-right: 8px;
+}
+
+.step-description {
+  color: #555;
+  margin: 12px 0;
+}
+
+.step-meta {
+  font-size: 0.875rem;
+  color: #666;
+  margin: 4px 0;
+}
+
+.step-meta code {
+  background-color: #f5f5f5;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: monospace;
+}

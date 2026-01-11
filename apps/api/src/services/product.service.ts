@@ -88,7 +88,7 @@ class InMemoryProductService {
 
   /**
    * Delete a product (with tenant verification through project)
-   * Note: In future, should check for dependent scripts
+   * Note: This will also cascade delete all scripts
    */
   async delete(id: string, tenantId: string): Promise<boolean> {
     const product = await this.findOne(id, tenantId);
@@ -96,8 +96,11 @@ class InMemoryProductService {
       return false;
     }
 
-    // TODO: Check for dependent scripts before deleting
-    // For now, we just delete the product
+    // Import here to avoid circular dependency
+    const { scriptService } = await import('./script.service');
+    
+    // Cascade delete scripts
+    await scriptService.deleteByProduct(id);
 
     this.products.delete(id);
     return true;
