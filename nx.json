@@ -45,10 +45,13 @@
     }
   },
   "release": {
-    "projects": ["api"],
+    "projects": ["api", "sdk"],
     "projectsRelationship": "independent",
     "docker": {
       "skipVersionActions": true
+    },
+    "version": {
+      "preVersionCommand": "npx nx run-many -t build"
     }
   },
   "plugins": [
@@ -88,6 +91,12 @@
       "plugin": "@nx/vitest",
       "options": {
         "testTargetName": "vite:test"
+      }
+    },
+    {
+      "plugin": "@nx/jest/plugin",
+      "options": {
+        "targetName": "test"
       }
     }
   ],

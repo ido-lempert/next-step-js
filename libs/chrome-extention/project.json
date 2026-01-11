@@ -1,0 +1,21 @@
+{
+  "name": "chrome-extention",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/chrome-extention/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/chrome-extention",
+        "main": "libs/chrome-extention/src/index.ts",
+        "tsConfig": "libs/chrome-extention/tsconfig.lib.json",
+        "assets": ["libs/chrome-extention/*.md"],
+        "format": ["cjs"],
+        "generatePackageJson": true
+      }
+    }
+  }
+}
