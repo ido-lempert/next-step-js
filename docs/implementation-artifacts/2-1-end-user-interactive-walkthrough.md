@@ -25,11 +25,13 @@ so that **I can learn how to use features in my application with contextual, vis
 This is the **core delivery mechanism** for Next-Step's value proposition - the interactive walkthrough component that overlays training content on live websites. This component must work across any website without breaking their CSS, provide smooth animations, and handle edge cases (element not found, responsive layouts, etc.).
 
 **Key Business Value:**
+
 - Primary training delivery mechanism for end users
 - Differentiator from static documentation
 - Foundation for user engagement and product adoption
 
 **Dependencies:**
+
 - Story 1.3 complete (scripts and steps created in Back Office)
 - SDK initialization framework (can be built in parallel)
 
@@ -152,6 +154,7 @@ This is the **core delivery mechanism** for Next-Step's value proposition - the 
 ### Project Structure Notes
 
 **SDK Structure:**
+
 ```
 libs/sdk/src/
 ├── components/
@@ -171,26 +174,27 @@ libs/sdk/src/
 ### Critical Implementation Details
 
 1. **Shadow DOM Setup:**
+
 ```typescript
 export class WalkthroughComponent {
   private shadowRoot: ShadowRoot;
   private container: HTMLDivElement;
-  
+
   constructor() {
     // Create container and attach shadow root
     this.container = document.createElement('div');
     this.container.id = 'nextstep-walkthrough';
     this.shadowRoot = this.container.attachShadow({ mode: 'open' });
-    
+
     // Inject styles
     const styleSheet = document.createElement('style');
     styleSheet.textContent = WALKTHROUGH_STYLES;
     this.shadowRoot.appendChild(styleSheet);
-    
+
     // Append to body
     document.body.appendChild(this.container);
   }
-  
+
   destroy() {
     this.container.remove();
   }
@@ -198,6 +202,7 @@ export class WalkthroughComponent {
 ```
 
 2. **Spotlight Effect with CSS:**
+
 ```css
 /* Backdrop with cutout for target element */
 .spotlight-overlay {
@@ -210,56 +215,50 @@ export class WalkthroughComponent {
   pointer-events: none;
   background: rgba(0, 0, 0, 0.7);
   transition: clip-path 0.3s ease;
-  clip-path: polygon(
-    0% 0%, 0% 100%, 100% 100%, 100% 0%,
-    0% 0%, /* hole: */ 
-    var(--x) var(--y), 
-    calc(var(--x) + var(--w)) var(--y),
-    calc(var(--x) + var(--w)) calc(var(--y) + var(--h)),
-    var(--x) calc(var(--y) + var(--h)),
-    var(--x) var(--y)
-  );
+  clip-path: polygon(0% 0%, 0% 100%, 100% 100%, 100% 0%, 0% 0%, /* hole: */ var(--x) var(--y), calc(var(--x) + var(--w)) var(--y), calc(var(--x) + var(--w)) calc(var(--y) + var(--h)), var(--x) calc(var(--y) + var(--h)), var(--x) var(--y));
 }
 ```
 
 3. **Smart Tooltip Positioning:**
+
 ```typescript
 function positionTooltip(targetRect: DOMRect, tooltipEl: HTMLElement) {
   const viewport = {
     width: window.innerWidth,
-    height: window.innerHeight
+    height: window.innerHeight,
   };
-  
+
   // Try positions in order: bottom, top, right, left
   const positions = [
     { x: targetRect.left, y: targetRect.bottom + 10 },
     { x: targetRect.left, y: targetRect.top - tooltipEl.offsetHeight - 10 },
     { x: targetRect.right + 10, y: targetRect.top },
-    { x: targetRect.left - tooltipEl.offsetWidth - 10, y: targetRect.top }
+    { x: targetRect.left - tooltipEl.offsetWidth - 10, y: targetRect.top },
   ];
-  
+
   for (const pos of positions) {
     if (fitsInViewport(pos, tooltipEl, viewport)) {
       return pos;
     }
   }
-  
+
   // Fallback: center of screen
   return { x: viewport.width / 2, y: viewport.height / 2 };
 }
 ```
 
 4. **Element Finder with Retry:**
+
 ```typescript
 async function findElement(selector: string, maxRetries = 3): Promise<HTMLElement | null> {
   for (let i = 0; i < maxRetries; i++) {
     const element = document.querySelector(selector);
     if (element) return element as HTMLElement;
-    
+
     // Wait 500ms and retry (element might not be in DOM yet)
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 500));
   }
-  
+
   return null;
 }
 ```
@@ -267,18 +266,21 @@ async function findElement(selector: string, maxRetries = 3): Promise<HTMLElemen
 ### Testing Standards
 
 **Unit Tests:**
+
 - Test positioning algorithm with various viewport sizes
 - Test element finder with missing/delayed elements
 - Test navigation state transitions
 - Minimum 80% code coverage
 
 **Integration Tests:**
+
 - Test on sample HTML pages with different layouts
 - Test animations and transitions
 - Test keyboard navigation
 - Test accessibility with screen reader
 
 **Cross-Browser Tests:**
+
 - Chrome 90+, Firefox 88+, Safari 14+, Edge 90+
 - Mobile: iOS Safari 14+, Chrome Android 90+
 
@@ -292,17 +294,20 @@ async function findElement(selector: string, maxRetries = 3): Promise<HTMLElemen
 ### Important Gotchas & Anti-Patterns to Avoid
 
 ⚠️ **CRITICAL:**
+
 - Shadow DOM isolation MUST be complete - no global CSS leakage
 - Handle z-index carefully - ensure walkthrough above all host page content
 - Element selector MUST be resilient to missing elements
 
 ⚠️ **Common Mistakes:**
+
 - Not handling responsive layouts (fixed tooltips that don't reposition)
 - Memory leaks from event listeners not cleaned up
 - Not accounting for fixed headers when scrolling to elements
 - Poor animation performance (use CSS transforms, not top/left)
 
 ⚠️ **Performance:**
+
 - Use `requestAnimationFrame` for smooth animations
 - Debounce scroll/resize event handlers
 - Lazy load step images (don't preload all steps)

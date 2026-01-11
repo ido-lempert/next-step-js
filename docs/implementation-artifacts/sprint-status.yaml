@@ -46,34 +46,34 @@ development_status:
   1-3-product-manager-create-training-scripts: ready-for-dev
   epic-1-retrospective: optional
 
-  epic-2: backlog
-  2-1-end-user-interactive-walkthrough: backlog
-  2-2-end-user-walkthrough-auto-progress: backlog
+  epic-2: in-progress
+  2-1-end-user-interactive-walkthrough: ready-for-dev
+  2-2-end-user-walkthrough-auto-progress: ready-for-dev
   epic-2-retrospective: optional
 
-  epic-3: backlog
-  3-1-end-user-modal-training-content: backlog
+  epic-3: in-progress
+  3-1-end-user-modal-training-content: ready-for-dev
   epic-3-retrospective: optional
 
-  epic-4: backlog
-  4-1-developer-chrome-extension-preview: backlog
-  4-2-product-manager-iframe-preview: backlog
+  epic-4: in-progress
+  4-1-developer-chrome-extension-preview: ready-for-dev
+  4-2-product-manager-iframe-preview: ready-for-dev
   epic-4-retrospective: optional
 
-  epic-5: backlog
-  5-1-product-manager-ai-script-generation: backlog
+  epic-5: in-progress
+  5-1-product-manager-ai-script-generation: ready-for-dev
   epic-5-retrospective: optional
 
-  epic-6: backlog
-  6-1-developer-sdk-integration: backlog
-  6-2-developer-update-segments-dynamically: backlog
+  epic-6: in-progress
+  6-1-developer-sdk-integration: ready-for-dev
+  6-2-developer-update-segments-dynamically: ready-for-dev
   epic-6-retrospective: optional
 
-  epic-7: backlog
-  7-1-product-manager-track-user-interactions: backlog
-  7-2-product-manager-integrate-analytics-platform: backlog
+  epic-7: in-progress
+  7-1-product-manager-track-user-interactions: ready-for-dev
+  7-2-product-manager-integrate-analytics-platform: ready-for-dev
   epic-7-retrospective: optional
 
-  epic-8: backlog
-  8-1-saas-provider-multi-tenant-isolation: backlog
+  epic-8: in-progress
+  8-1-saas-provider-multi-tenant-isolation: ready-for-dev
   epic-8-retrospective: optional
