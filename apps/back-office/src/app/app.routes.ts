@@ -13,4 +13,11 @@ export const appRoutes: Route[] = [
         (m) => m.ProjectListComponent
       ),
   },
+  {
+    path: 'projects/:id',
+    loadComponent: () =>
+      import('./features/projects/components/project-detail/project-detail.component').then(
+        (m) => m.ProjectDetailComponent
+      ),
+  },
 ];

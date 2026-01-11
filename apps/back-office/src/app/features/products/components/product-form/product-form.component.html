@@ -1,0 +1,42 @@
+<h2 mat-dialog-title>{{ title }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" placeholder="Enter product name" required />
+      @if (productForm.get('name')?.hasError('required') && productForm.get('name')?.touched) {
+        <mat-error>Name is required</mat-error>
+      }
+      @if (productForm.get('name')?.hasError('maxlength')) {
+        <mat-error>Name must not exceed 255 characters</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Description</mat-label>
+      <textarea
+        matInput
+        formControlName="description"
+        placeholder="Enter product description (optional)"
+        rows="4"
+      ></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()" [disabled]="loading()">Cancel</button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onSubmit()"
+    [disabled]="productForm.invalid || loading()"
+  >
+    @if (loading()) {
+      <mat-spinner diameter="20"></mat-spinner>
+    } @else {
+      {{ isEditMode ? 'Update' : 'Create' }}
+    }
+  </button>
+</mat-dialog-actions>

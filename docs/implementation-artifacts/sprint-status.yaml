@@ -42,7 +42,7 @@ story_location: docs/implementation-artifacts
 development_status:
   epic-1: in-progress
   1-1-project-manager-create-projects: done
-  1-2-product-manager-create-products: ready-for-dev
+  1-2-product-manager-create-products: done
   1-3-product-manager-create-training-scripts: ready-for-dev
   epic-1-retrospective: optional
 

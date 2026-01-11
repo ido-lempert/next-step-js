@@ -1,5 +1,6 @@
 import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -28,6 +29,7 @@ import { ProjectDeleteDialogComponent } from '../project-delete-dialog/project-d
 export class ProjectListComponent implements OnInit {
   private readonly projectService = inject(ProjectService);
   private readonly dialog = inject(MatDialog);
+  private readonly router = inject(Router);
   private readonly snackBar = inject(MatSnackBar);
 
   projects = signal<Project[]>([]);
@@ -56,6 +58,10 @@ export class ProjectListComponent implements OnInit {
         });
       },
     });
+  }
+
+  viewProject(project: Project): void {
+    this.router.navigate(['/projects', project.id]);
   }
 
   openCreateDialog(): void {

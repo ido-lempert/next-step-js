@@ -1,0 +1,43 @@
+<div class="project-detail-container">
+  @if (loading()) {
+    <div class="loading-container">
+      <mat-spinner></mat-spinner>
+      <p>Loading project...</p>
+    </div>
+  } @else if (error()) {
+    <div class="error-container">
+      <mat-icon color="warn">error</mat-icon>
+      <p>{{ error() }}</p>
+      <button mat-button (click)="goBack()">Go Back</button>
+    </div>
+  } @else if (project()) {
+    <div class="header">
+      <button mat-icon-button (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div class="header-content">
+        <h1>{{ project()?.name }}</h1>
+        @if (project()?.description) {
+          <p class="description">{{ project()?.description }}</p>
+        }
+      </div>
+    </div>
+
+    <mat-card class="project-info">
+      <mat-card-content>
+        <div class="info-row">
+          <span class="label">Created:</span>
+          <span>{{ project()?.createdAt | date: 'medium' }}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Last Updated:</span>
+          <span>{{ project()?.updatedAt | date: 'medium' }}</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <div class="products-section">
+      <app-product-list [projectId]="project()!.id" />
+    </div>
+  }
+</div>
