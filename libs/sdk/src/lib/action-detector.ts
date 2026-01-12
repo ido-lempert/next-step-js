@@ -156,15 +156,27 @@ export class ActionDetector {
    * Show a success indicator near the target element
    */
   private showSuccessIndicator(target: HTMLElement): void {
+    // Create indicator in document body for visibility
+    // Note: This is intentionally outside Shadow DOM so it overlays everything
     const indicator = document.createElement('div');
-    indicator.className = 'nextstep-success-indicator';
+    indicator.style.cssText = `
+      position: fixed;
+      z-index: 1000001;
+      background: #10b981;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      animation: successPop 0.3s ease;
+    `;
     indicator.textContent = '✓ Action completed';
-    indicator.style.position = 'fixed';
     
     const rect = target.getBoundingClientRect();
     indicator.style.left = `${rect.left + rect.width / 2 - 80}px`;
     indicator.style.top = `${rect.top - 40}px`;
-    indicator.style.zIndex = '1000001';
     
     document.body.appendChild(indicator);
 

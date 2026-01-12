@@ -150,6 +150,11 @@ export class WalkthroughComponent {
         // Handle missing element gracefully
         console.warn(`Element not found: ${step.element_selector}`);
         this.hideHighlight();
+        
+        // Call onElementNotFound callback if provided
+        if (this.config.onElementNotFound) {
+          this.config.onElementNotFound(step.element_selector, step);
+        }
       }
     } else {
       this.hideHighlight();
@@ -405,12 +410,12 @@ export class WalkthroughComponent {
       timeSpent,
     };
 
-    // Fire to analytics or logging system
-    console.log('Navigation event:', event);
-    
-    // Could be extended to send to analytics endpoint
-    if (typeof window !== 'undefined' && (window as any).nextstepAnalytics) {
-      (window as any).nextstepAnalytics.track(event);
+    // Fire to analytics via callback if provided
+    if (this.config.onAnalytics) {
+      this.config.onAnalytics(event);
+    } else {
+      // Default: log to console
+      console.log('Navigation event:', event);
     }
   }
 }

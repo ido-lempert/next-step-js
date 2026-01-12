@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Next-Step SDK Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f3f4f6;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            color: #1f2937;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #6b7280;
+        }
+
+        .demo-controls {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .demo-controls h2 {
+            color: #1f2937;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #4f46e5;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #4338ca;
+        }
+
+        .btn-secondary {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #059669;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h3 {
+            color: #1f2937;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #374151;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .demo-action {
+            background: #fef3c7;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+        }
+
+        .demo-action p {
+            color: #92400e;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Next-Step SDK Demo</h1>
+        <p>Interactive walkthrough demonstration with auto-progress features</p>
+    </div>
+
+    <div class="demo-controls">
+        <h2>Walkthrough Controls</h2>
+        <div class="button-group">
+            <button id="start-basic" class="btn-primary">Start Basic Walkthrough</button>
+            <button id="start-auto-progress" class="btn-secondary">Start Auto-Progress Walkthrough</button>
+            <button id="stop-walkthrough" class="btn-danger">Stop Walkthrough</button>
+        </div>
+    </div>
+
+    <div class="content-grid">
+        <div class="card" id="welcome-card">
+            <h3>Welcome!</h3>
+            <p>This is a demo page for the Next-Step SDK. Click one of the buttons above to start an interactive walkthrough.</p>
+            <button class="btn-primary" id="learn-more">Learn More</button>
+        </div>
+
+        <div class="card" id="features-card">
+            <h3>Key Features</h3>
+            <p>• Shadow DOM isolation prevents CSS conflicts</p>
+            <p>• Smart tooltip positioning</p>
+            <p>• Keyboard navigation support</p>
+            <p>• Auto-progress with action detection</p>
+        </div>
+
+        <div class="card" id="contact-form">
+            <h3>Contact Form</h3>
+            <form id="demo-form">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" placeholder="Enter your name">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" placeholder="Your message here..."></textarea>
+                </div>
+                <button type="submit" class="btn-primary" id="submit-form">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="demo-action" id="demo-action">
+        <p>👉 Try the walkthroughs to see the SDK in action!</p>
+    </div>
+
+    <script type="module">
+        // This is a placeholder - in a real implementation, you would import from the built SDK
+        // For demo purposes, we'll simulate the SDK API
+        
+        console.log('Demo page loaded. In a real implementation, import the SDK like:');
+        console.log('import { nextStep } from "@nstep/sdk";');
+        
+        // Basic walkthrough configuration
+        const basicWalkthroughConfig = {
+            id: 'basic-demo',
+            name: 'Basic Demo Walkthrough',
+            steps: [
+                {
+                    id: 'step-1',
+                    title: 'Welcome to Next-Step!',
+                    description: 'This is an interactive walkthrough that guides you through the page step by step.',
+                    element_selector: '#welcome-card',
+                    order_index: 0
+                },
+                {
+                    id: 'step-2',
+                    title: 'Explore Features',
+                    description: 'Here you can see the key features of the Next-Step SDK.',
+                    element_selector: '#features-card',
+                    order_index: 1
+                },
+                {
+                    id: 'step-3',
+                    title: 'Try the Contact Form',
+                    description: 'Fill out this form to see auto-progress in action!',
+                    element_selector: '#contact-form',
+                    order_index: 2
+                }
+            ],
+            onComplete: () => {
+                alert('Walkthrough completed! 🎉');
+            },
+            onSkip: () => {
+                alert('Walkthrough skipped');
+            }
+        };
+
+        // Auto-progress walkthrough configuration
+        const autoProgressConfig = {
+            id: 'auto-progress-demo',
+            name: 'Auto-Progress Demo',
+            steps: [
+                {
+                    id: 'step-1',
+                    title: 'Click the Learn More Button',
+                    description: 'Click the button below and the walkthrough will automatically advance!',
+                    element_selector: '#learn-more',
+                    order_index: 0,
+                    autoProgress: true,
+                    actionType: 'click'
+                },
+                {
+                    id: 'step-2',
+                    title: 'Enter Your Name',
+                    description: 'Type your name in this field to proceed automatically.',
+                    element_selector: '#name',
+                    order_index: 1,
+                    autoProgress: true,
+                    actionType: 'input'
+                },
+                {
+                    id: 'step-3',
+                    title: 'Submit the Form',
+                    description: 'Submit the form to complete the walkthrough!',
+                    element_selector: '#demo-form',
+                    order_index: 2,
+                    autoProgress: true,
+                    actionType: 'submit'
+                }
+            ],
+            onComplete: () => {
+                alert('Auto-progress walkthrough completed! 🎉');
+            }
+        };
+
+        // Button event listeners
+        document.getElementById('start-basic').addEventListener('click', () => {
+            console.log('Starting basic walkthrough with config:', basicWalkthroughConfig);
+            alert('In a real implementation, this would start the basic walkthrough.\n\nTo use in your app:\nnextStep.startWalkthrough(basicWalkthroughConfig);');
+        });
+
+        document.getElementById('start-auto-progress').addEventListener('click', () => {
+            console.log('Starting auto-progress walkthrough with config:', autoProgressConfig);
+            alert('In a real implementation, this would start the auto-progress walkthrough.\n\nTo use in your app:\nnextStep.startWalkthrough(autoProgressConfig);');
+        });
+
+        document.getElementById('stop-walkthrough').addEventListener('click', () => {
+            console.log('Stopping walkthrough');
+            alert('In a real implementation, this would stop the active walkthrough.\n\nTo use in your app:\nnextStep.stopWalkthrough();');
+        });
+
+        // Form submission handler
+        document.getElementById('demo-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Form submitted!');
+        });
+
+        // Learn more button
+        document.getElementById('learn-more').addEventListener('click', () => {
+            alert('Great! You clicked the Learn More button.');
+        });
+
+        console.log('SDK Demo Configurations:', {
+            basic: basicWalkthroughConfig,
+            autoProgress: autoProgressConfig
+        });
+    </script>
+</body>
+</html>

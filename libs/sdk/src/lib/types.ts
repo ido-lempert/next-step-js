@@ -54,6 +54,10 @@ export interface WalkthroughConfig {
   onSkip?: () => void;
   /** Optional callback when step changes */
   onStepChange?: (step: StepConfig, index: number) => void;
+  /** Optional callback for analytics/tracking events */
+  onAnalytics?: (event: ProgressEvent) => void;
+  /** Optional callback when element is not found */
+  onElementNotFound?: (selector: string, step: StepConfig) => void;
 }
 
 /**
