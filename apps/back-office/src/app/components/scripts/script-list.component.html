@@ -1,0 +1,150 @@
+<div class="script-list-container">
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb">
+    <a routerLink="/projects">Projects</a>
+    <span class="separator">›</span>
+    @if (product()) {
+      <span>{{ product()!.name }}</span>
+      <span class="separator">›</span>
+    }
+    <span>Scripts</span>
+  </nav>
+
+  <div class="header">
+    <h1>Scripts</h1>
+    <button class="btn-primary" (click)="onShowCreateDialog()">
+      Create New Script
+    </button>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters">
+    <div class="filter-group">
+      <label for="typeFilter">Type:</label>
+      <select id="typeFilter" [(ngModel)]="filterType">
+        <option value="all">All</option>
+        <option value="walkthrough">Walkthrough</option>
+        <option value="modal">Modal</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label for="statusFilter">Status:</label>
+      <select id="statusFilter" [(ngModel)]="filterStatus">
+        <option value="all">All</option>
+        <option value="draft">Draft</option>
+        <option value="published">Published</option>
+      </select>
+    </div>
+  </div>
+
+  @if (scriptService.loading()) {
+    <div class="loading">Loading scripts...</div>
+  }
+
+  @if (scriptService.error()) {
+    <div class="error">{{ scriptService.error() }}</div>
+  }
+
+  @if (!scriptService.loading() && scriptService.scripts().length === 0) {
+    <div class="empty-state">
+      <p>No scripts found. Create your first script to get started.</p>
+    </div>
+  }
+
+  @if (filteredScripts().length > 0) {
+    <div class="script-grid">
+      @for (script of filteredScripts(); track script.id) {
+        <div class="script-card">
+          <div class="card-header">
+            <h3>{{ script.name }}</h3>
+            <div class="badges">
+              <span [class]="'badge ' + getTypeBadgeClass(script.type)">
+                {{ script.type }}
+              </span>
+              <span [class]="'badge ' + getStatusBadgeClass(script.status)">
+                {{ script.status }}
+              </span>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="step-count">Steps: {{ script.step_count || 0 }}</p>
+            <p class="date-info">
+              Created: {{ formatDate(script.created_at) }}
+            </p>
+            <p class="date-info">
+              Updated: {{ formatDate(script.updated_at) }}
+            </p>
+          </div>
+          <div class="card-actions">
+            <button
+              class="btn-primary"
+              [routerLink]="['/scripts', script.id, 'editor']"
+            >
+              Edit
+            </button>
+            <button class="btn-delete" (click)="onDelete(script)">
+              Delete
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+<!-- Create Script Dialog -->
+@if (showCreateDialog()) {
+  <div class="dialog-overlay">
+    <div class="dialog">
+      <h2>Create New Script</h2>
+      <form (submit)="onCreateScript()">
+        <div class="form-group">
+          <label for="scriptName">Name:</label>
+          <input
+            type="text"
+            id="scriptName"
+            [(ngModel)]="newScriptName"
+            name="scriptName"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="scriptType">Type:</label>
+          <select
+            id="scriptType"
+            [(ngModel)]="newScriptType"
+            name="scriptType"
+          >
+            <option value="walkthrough">Walkthrough</option>
+            <option value="modal">Modal</option>
+          </select>
+        </div>
+        <div class="dialog-actions">
+          <button type="button" class="btn-secondary" (click)="cancelCreate()">
+            Cancel
+          </button>
+          <button type="submit" class="btn-primary">Create</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
+
+<!-- Delete Confirmation Dialog -->
+@if (showDeleteDialog()) {
+  <div class="dialog-overlay">
+    <div class="dialog">
+      <h2>Confirm Delete</h2>
+      <p>
+        Are you sure you want to delete script "{{
+          scriptToDelete()?.name
+        }}"?
+      </p>
+      <p class="warning">This will also delete all steps in this script. This action cannot be undone.</p>
+      <div class="dialog-actions">
+        <button class="btn-secondary" (click)="cancelDelete()">Cancel</button>
+        <button class="btn-danger" (click)="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+}

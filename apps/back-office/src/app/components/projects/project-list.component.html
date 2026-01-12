@@ -1,0 +1,82 @@
+<div class="project-list-container">
+  <div class="header">
+    <h1>Projects</h1>
+    <button class="btn-primary" routerLink="/projects/new">
+      Create New Project
+    </button>
+  </div>
+
+  @if (projectService.loading()) {
+    <div class="loading">Loading projects...</div>
+  }
+
+  @if (projectService.error()) {
+    <div class="error">{{ projectService.error() }}</div>
+  }
+
+  @if (!projectService.loading() && projectService.projects().length === 0) {
+    <div class="empty-state">
+      <p>No projects found. Create your first project to get started.</p>
+    </div>
+  }
+
+  @if (projectService.projects().length > 0) {
+    <table class="project-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Created</th>
+          <th>Updated</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (project of projectService.projects(); track project.id) {
+          <tr>
+            <td>{{ project.name }}</td>
+            <td>{{ project.description || '-' }}</td>
+            <td>{{ formatDate(project.created_at) }}</td>
+            <td>{{ formatDate(project.updated_at) }}</td>
+            <td>
+              <button
+                class="btn-view"
+                [routerLink]="['/projects', project.id, 'products']"
+              >
+                Products
+              </button>
+              <button
+                class="btn-edit"
+                [routerLink]="['/projects/edit', project.id]"
+              >
+                Edit
+              </button>
+              <button class="btn-delete" (click)="onDelete(project)">
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>
+
+<!-- Delete Confirmation Dialog -->
+@if (showDeleteDialog()) {
+  <div class="dialog-overlay">
+    <div class="dialog">
+      <h2>Confirm Delete</h2>
+      <p>
+        Are you sure you want to delete project "{{
+          projectToDelete()?.name
+        }}"?
+      </p>
+      <p class="warning">This action cannot be undone.</p>
+      <div class="dialog-actions">
+        <button class="btn-secondary" (click)="cancelDelete()">Cancel</button>
+        <button class="btn-danger" (click)="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+}

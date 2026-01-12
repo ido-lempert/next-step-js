@@ -1,0 +1,106 @@
+<div class="product-list-container">
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb">
+    <a routerLink="/projects">Projects</a>
+    <span class="separator">›</span>
+    @if (project()) {
+      <span>{{ project()!.name }}</span>
+      <span class="separator">›</span>
+    }
+    <span>Products</span>
+  </nav>
+
+  <div class="header">
+    <h1>Products</h1>
+    <button
+      class="btn-primary"
+      [routerLink]="['/projects', projectId(), 'products', 'new']"
+    >
+      Create New Product
+    </button>
+  </div>
+
+  @if (productService.loading()) {
+    <div class="loading">Loading products...</div>
+  }
+
+  @if (productService.error()) {
+    <div class="error">{{ productService.error() }}</div>
+  }
+
+  @if (!productService.loading() && productService.products().length === 0) {
+    <div class="empty-state">
+      <p>No products found. Create your first product to get started.</p>
+    </div>
+  }
+
+  @if (productService.products().length > 0) {
+    <table class="product-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Created</th>
+          <th>Updated</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (product of productService.products(); track product.id) {
+          <tr>
+            <td>{{ product.name }}</td>
+            <td>{{ product.description || '-' }}</td>
+            <td>{{ formatDate(product.created_at) }}</td>
+            <td>{{ formatDate(product.updated_at) }}</td>
+            <td>
+              <button
+                class="btn-primary"
+                [routerLink]="[
+                  '/products',
+                  product.id,
+                  'scripts'
+                ]"
+              >
+                Scripts
+              </button>
+              <button
+                class="btn-edit"
+                [routerLink]="[
+                  '/projects',
+                  projectId(),
+                  'products',
+                  'edit',
+                  product.id
+                ]"
+              >
+                Edit
+              </button>
+              <button class="btn-delete" (click)="onDelete(product)">
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>
+
+<!-- Delete Confirmation Dialog -->
+@if (showDeleteDialog()) {
+  <div class="dialog-overlay">
+    <div class="dialog">
+      <h2>Confirm Delete</h2>
+      <p>
+        Are you sure you want to delete product "{{
+          productToDelete()?.name
+        }}"?
+      </p>
+      <p class="warning">This action cannot be undone.</p>
+      <div class="dialog-actions">
+        <button class="btn-secondary" (click)="cancelDelete()">Cancel</button>
+        <button class="btn-danger" (click)="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+}
