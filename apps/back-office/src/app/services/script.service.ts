@@ -11,13 +11,14 @@ import {
   UpdateScriptStepDto,
   ReorderStepsDto,
 } from '../models/script.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ScriptService {
-  private readonly apiUrl = 'http://localhost:3333/api';
-  private readonly tenantId = 'tenant-1';
+  private readonly apiUrl = environment.apiUrl;
+  private readonly tenantId = environment.defaultTenantId;
 
   scripts = signal<Script[]>([]);
   currentScript = signal<ScriptWithSteps | null>(null);

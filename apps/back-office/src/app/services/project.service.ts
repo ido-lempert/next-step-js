@@ -2,13 +2,14 @@ import { Injectable, signal } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { Project, CreateProjectDto, UpdateProjectDto } from '../models/project.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProjectService {
-  private readonly apiUrl = 'http://localhost:3333/api/projects';
-  private readonly tenantId = 'tenant-1'; // For MVP, hardcoded tenant ID
+  private readonly apiUrl = `${environment.apiUrl}/projects`;
+  private readonly tenantId = environment.defaultTenantId;
 
   // Signals for reactive state
   projects = signal<Project[]>([]);

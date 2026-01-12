@@ -2,13 +2,14 @@ import { Injectable, signal } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { Product, CreateProductDto, UpdateProductDto } from '../models/product.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductService {
-  private readonly apiUrl = 'http://localhost:3333/api';
-  private readonly tenantId = 'tenant-1'; // For MVP, hardcoded tenant ID
+  private readonly apiUrl = environment.apiUrl;
+  private readonly tenantId = environment.defaultTenantId;
 
   // Signals for reactive state
   products = signal<Product[]>([]);
