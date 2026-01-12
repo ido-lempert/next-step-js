@@ -47,6 +47,11 @@
               <mat-card-title>
                 <span class="step-number">Step {{ i + 1 }}</span>
                 {{ step.title }}
+                @if (step.config?.['autoProgress']) {
+                  <mat-icon class="auto-progress-icon" matTooltip="Auto-advances when action completed">
+                    bolt
+                  </mat-icon>
+                }
               </mat-card-title>
             </mat-card-header>
             <mat-card-content>

@@ -11,3 +11,21 @@ mat-dialog-content {
 textarea {
   min-height: 60px;
 }
+
+.auto-progress-section {
+  margin-top: 24px;
+  padding: 16px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+
+.auto-progress-section h3 {
+  margin: 0 0 16px 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.auto-progress-section mat-checkbox {
+  margin-bottom: 16px;
+}

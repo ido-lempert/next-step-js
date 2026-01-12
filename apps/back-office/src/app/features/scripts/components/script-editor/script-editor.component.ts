@@ -9,6 +9,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { ScriptService } from '../../services/script.service';
 import { Script, ScriptStep } from '../../models/script.model';
 import { StepFormDialogComponent } from '../step-form-dialog/step-form-dialog.component';
@@ -25,6 +26,7 @@ import { StepFormDialogComponent } from '../step-form-dialog/step-form-dialog.co
     MatDialogModule,
     MatSnackBarModule,
     MatExpansionModule,
+    MatTooltipModule,
   ],
   templateUrl: './script-editor.component.html',
   styleUrl: './script-editor.component.css',

@@ -20,6 +20,10 @@ export interface ScriptStep {
   elementSelector?: string;
   actionType?: string;
   config?: Record<string, unknown>;
+  autoProgress?: boolean;
+  autoProgressAction?: 'click' | 'input' | 'submit' | 'navigate' | 'custom';
+  autoProgressSelector?: string;
+  autoProgressValidator?: string;
 }
 
 export interface WalkthroughConfig {
@@ -49,12 +53,12 @@ export interface ElementBounds extends Position, Dimensions {}
 export type TooltipPosition = 'top' | 'bottom' | 'left' | 'right' | 'center';
 
 export interface AnalyticsEvent {
-  type: 'step_view' | 'navigation' | 'complete' | 'skip' | 'error';
+  type: 'step_view' | 'navigation' | 'complete' | 'skip' | 'error' | 'action_completed';
   scriptId: string;
   stepId?: string;
   stepIndex?: number;
   timestamp: number;
   duration?: number;
-  action?: 'next' | 'back' | 'skip' | 'complete';
+  action?: 'next' | 'back' | 'skip' | 'complete' | 'auto_advance';
   error?: string;
 }

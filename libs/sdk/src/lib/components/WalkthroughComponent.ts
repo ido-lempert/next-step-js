@@ -7,6 +7,7 @@ import { WALKTHROUGH_STYLES } from '../styles';
 import { SpotlightOverlay } from './SpotlightOverlay';
 import { StepTooltip } from './StepTooltip';
 import { findElement, scrollToElement } from '../utils/elementFinder';
+import { ActionDetector } from '../actions/ActionDetector';
 
 export class WalkthroughComponent {
   private container: HTMLDivElement;
@@ -20,6 +21,7 @@ export class WalkthroughComponent {
   private stepStartTime: number = 0;
   private isActive = false;
   private keyboardHandler: (e: KeyboardEvent) => void;
+  private actionDetector: ActionDetector;
 
   constructor(config: WalkthroughConfig = {}) {
     // Merge config with defaults
@@ -57,6 +59,9 @@ export class WalkthroughComponent {
       onBack: () => this.back(),
       onSkip: () => this.skip(),
     });
+
+    // Initialize action detector
+    this.actionDetector = new ActionDetector();
 
     // Setup keyboard handler
     this.keyboardHandler = (e: KeyboardEvent) => this.handleKeyboard(e);
@@ -141,6 +146,11 @@ export class WalkthroughComponent {
         this.currentStepIndex === this.script.steps.length - 1
       );
 
+      // Attach action detector for auto-progress
+      if (step.autoProgress) {
+        this.actionDetector.attach(step, () => this.handleAutoProgress());
+      }
+
       // Fire callbacks
       this.config.onStepChange(step, this.currentStepIndex);
       this.trackEvent({
@@ -170,8 +180,53 @@ export class WalkthroughComponent {
   private async next(): Promise<void> {
     if (!this.script || !this.isActive) return;
 
+    // Detach action detector
+    this.actionDetector.detach();
+
     // Track navigation
     this.trackStepNavigation('next');
+
+    if (this.currentStepIndex < this.script.steps.length - 1) {
+      this.currentStepIndex++;
+      await this.showCurrentStep();
+    } else {
+      // Last step, complete walkthrough
+      await this.complete();
+    }
+  }
+
+  /**
+   * Handle auto-progress when action is completed
+   */
+  private async handleAutoProgress(): Promise<void> {
+    if (!this.script || !this.isActive) return;
+
+    const step = this.script.steps[this.currentStepIndex];
+
+    // Track action completion
+    this.trackEvent({
+      type: 'action_completed',
+      scriptId: this.script.id,
+      stepId: step.id,
+      stepIndex: this.currentStepIndex,
+      timestamp: Date.now(),
+      duration: Date.now() - this.stepStartTime,
+      action: 'auto_advance',
+    });
+
+    // Detach action detector before progressing
+    this.actionDetector.detach();
+
+    // Track navigation with auto_advance action
+    this.trackEvent({
+      type: 'navigation',
+      scriptId: this.script.id,
+      stepId: step.id,
+      stepIndex: this.currentStepIndex,
+      timestamp: Date.now(),
+      duration: Date.now() - this.stepStartTime,
+      action: 'auto_advance',
+    });
 
     if (this.currentStepIndex < this.script.steps.length - 1) {
       this.currentStepIndex++;
@@ -187,6 +242,9 @@ export class WalkthroughComponent {
    */
   private async back(): Promise<void> {
     if (!this.script || !this.isActive) return;
+
+    // Detach action detector
+    this.actionDetector.detach();
 
     // Track navigation
     this.trackStepNavigation('back');
@@ -297,6 +355,9 @@ export class WalkthroughComponent {
    */
   async destroy(): Promise<void> {
     this.isActive = false;
+
+    // Detach action detector
+    this.actionDetector.detach();
 
     // Remove keyboard listener
     document.removeEventListener('keydown', this.keyboardHandler);

@@ -37,6 +37,35 @@
         <mat-error>Action type must not exceed 50 characters</mat-error>
       }
     </mat-form-field>
+
+    <!-- Auto-Progress Section -->
+    <div class="auto-progress-section">
+      <h3>Auto-Progress Configuration</h3>
+      
+      <mat-checkbox formControlName="autoProgress">
+        Auto-advance when user completes action
+      </mat-checkbox>
+
+      @if (form.get('autoProgress')?.value) {
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Auto-Progress Action Type</mat-label>
+          <mat-select formControlName="autoProgressAction">
+            @for (actionType of actionTypes; track actionType.value) {
+              <mat-option [value]="actionType.value">
+                {{ actionType.label }}
+              </mat-option>
+            }
+          </mat-select>
+          <mat-hint>What user action should trigger auto-progression?</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Custom Selector (advanced)</mat-label>
+          <input matInput formControlName="autoProgressSelector" placeholder="#custom-element" />
+          <mat-hint>Leave empty to use the main Element Selector above</mat-hint>
+        </mat-form-field>
+      }
+    </div>
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
