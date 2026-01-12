@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Next-Step Modal Example</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #1a1a1a;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #718096;
+            font-size: 18px;
+            margin-bottom: 40px;
+        }
+        .button-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+        button {
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn-primary {
+            background: #3182ce;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #2c5aa0;
+        }
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #2d3748;
+        }
+        .btn-secondary:hover {
+            background: #cbd5e0;
+        }
+        .info-box {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .info-box h3 {
+            margin-top: 0;
+            color: #2d3748;
+        }
+        .info-box code {
+            background: #e2e8f0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Next-Step Modal Component</h1>
+    <p class="subtitle">Interactive training modals for your web application</p>
+
+    <div class="button-group">
+        <button class="btn-primary" onclick="alert('In production, this would show the modal!\n\nImport from: @next-step/sdk')">
+            Show Modal Demo
+        </button>
+    </div>
+
+    <div class="info-box">
+        <h3>Implementation Example</h3>
+        <pre><code>import { startModal } from '@next-step/sdk';
+
+const script = {
+  id: 'welcome-tour',
+  productId: 'my-app',
+  name: 'Welcome Tour',
+  type: 'modal',
+  status: 'published',
+  steps: [
+    {
+      id: 'step-1',
+      scriptId: 'welcome-tour',
+      orderIndex: 0,
+      title: 'Welcome!',
+      description: 'Welcome to our app',
+      imageUrl: 'https://example.com/welcome.png'
+    }
+  ]
+};
+
+await startModal(script);</code></pre>
+    </div>
+
+    <div class="info-box">
+        <h3>Features</h3>
+        <ul>
+            <li>Shadow DOM for style isolation</li>
+            <li>Keyboard navigation (arrows, ESC)</li>
+            <li>"Don't show again" functionality</li>
+            <li>Responsive design (mobile & desktop)</li>
+            <li>Image support with lazy loading</li>
+            <li>Analytics tracking</li>
+            <li>Focus trap for accessibility</li>
+        </ul>
+    </div>
+
+    <div class="info-box">
+        <h3>Documentation</h3>
+        <p>See <code>docs/MODAL_USAGE.md</code> for complete usage guide and API reference.</p>
+    </div>
+</body>
+</html>

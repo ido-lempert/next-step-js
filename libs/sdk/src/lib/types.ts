@@ -24,6 +24,7 @@ export interface ScriptStep {
   autoProgressAction?: 'click' | 'input' | 'submit' | 'navigate' | 'custom';
   autoProgressSelector?: string;
   autoProgressValidator?: string;
+  imageUrl?: string; // For modal steps
 }
 
 export interface WalkthroughConfig {
@@ -35,6 +36,18 @@ export interface WalkthroughConfig {
   onStepChange?: (step: ScriptStep, index: number) => void;
   onComplete?: () => void;
   onSkip?: () => void;
+  onError?: (error: Error) => void;
+}
+
+export interface ModalConfig {
+  animationDuration?: number;
+  showDontShowAgain?: boolean;
+  dismissalExpiryDays?: number;
+  displayDelay?: number;
+  onStepChange?: (step: ScriptStep, index: number) => void;
+  onComplete?: () => void;
+  onSkip?: () => void;
+  onDismiss?: () => void;
   onError?: (error: Error) => void;
 }
 
@@ -53,12 +66,12 @@ export interface ElementBounds extends Position, Dimensions {}
 export type TooltipPosition = 'top' | 'bottom' | 'left' | 'right' | 'center';
 
 export interface AnalyticsEvent {
-  type: 'step_view' | 'navigation' | 'complete' | 'skip' | 'error' | 'action_completed';
+  type: 'step_view' | 'navigation' | 'complete' | 'skip' | 'error' | 'action_completed' | 'dismiss';
   scriptId: string;
   stepId?: string;
   stepIndex?: number;
   timestamp: number;
   duration?: number;
-  action?: 'next' | 'back' | 'skip' | 'complete' | 'auto_advance';
+  action?: 'next' | 'back' | 'skip' | 'complete' | 'auto_advance' | 'dismiss';
   error?: string;
 }

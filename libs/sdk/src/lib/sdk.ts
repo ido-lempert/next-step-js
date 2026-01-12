@@ -1,11 +1,12 @@
 /**
- * Next-Step SDK - Interactive Walkthrough Component
+ * Next-Step SDK - Interactive Walkthrough and Modal Components
  */
 
 import { WalkthroughComponent } from './components/WalkthroughComponent';
-import { Script, WalkthroughConfig } from './types';
+import { ModalComponent } from './components/ModalComponent';
+import { Script, WalkthroughConfig, ModalConfig } from './types';
 
-export { WalkthroughComponent, Script, WalkthroughConfig };
+export { WalkthroughComponent, ModalComponent, Script, WalkthroughConfig, ModalConfig };
 
 /**
  * Initialize and start a walkthrough
@@ -31,4 +32,30 @@ export function createWalkthrough(
   config?: WalkthroughConfig
 ): WalkthroughComponent {
   return new WalkthroughComponent(config);
+}
+
+/**
+ * Initialize and start a modal
+ * @param script - The script to execute
+ * @param config - Optional configuration
+ * @returns ModalComponent instance
+ */
+export async function startModal(
+  script: Script,
+  config?: ModalConfig
+): Promise<ModalComponent> {
+  const modal = new ModalComponent(config);
+  await modal.start(script);
+  return modal;
+}
+
+/**
+ * Create a modal component without starting it
+ * @param config - Optional configuration
+ * @returns ModalComponent instance
+ */
+export function createModal(
+  config?: ModalConfig
+): ModalComponent {
+  return new ModalComponent(config);
 }
