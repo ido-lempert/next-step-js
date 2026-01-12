@@ -1,4 +1,5 @@
 import { Project } from '../types/project';
+import { productStore } from './product-store';
 
 class ProjectStore {
   private projects: Map<string, Project> = new Map();
@@ -46,6 +47,10 @@ class ProjectStore {
     if (!project) {
       return false;
     }
+    
+    // CASCADE delete: delete all products belonging to this project
+    productStore.deleteByProjectId(id);
+    
     return this.projects.delete(id);
   }
 }

@@ -1,6 +1,7 @@
 import express from 'express';
 import { tenantMiddleware } from './middleware/tenant';
 import { projectRouter } from './routes/projects';
+import { productRouter } from './routes/products';
 
 const host = process.env.HOST ?? 'localhost';
 const port = process.env.PORT ? Number(process.env.PORT) : 3333;
@@ -28,6 +29,7 @@ app.get('/', (req, res) => {
 
 // API routes with tenant middleware
 app.use('/api/projects', tenantMiddleware, projectRouter);
+app.use('/api', tenantMiddleware, productRouter);
 
 app.listen(port, host, () => {
   console.log(`[ ready ] http://${host}:${port}`);
