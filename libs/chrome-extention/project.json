@@ -6,16 +6,46 @@
   "tags": [],
   "targets": {
     "build": {
-      "executor": "@nx/esbuild:esbuild",
+      "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/libs/chrome-extention",
         "main": "libs/chrome-extention/src/index.ts",
         "tsConfig": "libs/chrome-extention/tsconfig.lib.json",
-        "assets": ["libs/chrome-extention/*.md"],
-        "format": ["cjs"],
-        "generatePackageJson": true
+        "assets": [
+          "libs/chrome-extention/*.md",
+          {
+            "input": "libs/chrome-extention/src",
+            "glob": "manifest.json",
+            "output": "."
+          },
+          {
+            "input": "libs/chrome-extention/src",
+            "glob": "*.js",
+            "output": "."
+          },
+          {
+            "input": "libs/chrome-extention/src/popup",
+            "glob": "**/*",
+            "output": "./popup"
+          },
+          {
+            "input": "libs/chrome-extention/src/icons",
+            "glob": "**/*",
+            "output": "./icons"
+          }
+        ]
       }
+    },
+    "package": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "cd dist/libs/chrome-extention && zip -r ../chrome-extention.zip ."
+        ],
+        "parallel": false
+      },
+      "dependsOn": ["build"]
     }
   }
 }

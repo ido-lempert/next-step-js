@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Next-Step Preview</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Next-Step Preview</h1>
+      <p class="subtitle">Developer Preview Mode</p>
+    </div>
+
+    <div class="content">
+      <div class="status-section">
+        <label for="preview-toggle" class="toggle-label">
+          <span class="label-text">Preview Mode</span>
+          <div class="toggle-wrapper">
+            <input type="checkbox" id="preview-toggle" class="toggle-input">
+            <span class="toggle-slider"></span>
+          </div>
+        </label>
+        <div class="status-indicator">
+          <span class="status-dot" id="status-dot"></span>
+          <span class="status-text" id="status-text">Inactive</span>
+        </div>
+      </div>
+
+      <div class="info-section">
+        <h3>What does this do?</h3>
+        <ul class="info-list">
+          <li>Removes CSP and X-Frame-Options headers</li>
+          <li>Allows this page to load in Back Office iframe</li>
+          <li>Injects Next-Step SDK for script preview</li>
+        </ul>
+      </div>
+
+      <div class="instructions">
+        <h3>How to use:</h3>
+        <ol class="instructions-list">
+          <li>Enable preview mode for this tab</li>
+          <li>Open Back Office script editor</li>
+          <li>Enter this page URL in preview</li>
+          <li>Test your training scripts live</li>
+        </ol>
+      </div>
+
+      <div class="warning">
+        <strong>⚠️ Developer Tool Only</strong>
+        <p>This extension modifies security headers. Only use on development/test sites.</p>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p class="version">v1.0.0</p>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
