@@ -11,75 +11,95 @@
       <button mat-button (click)="loadScript()">Retry</button>
     </div>
   } @else if (script()) {
-    <div class="header">
-      <div class="title-section">
-        <button mat-icon-button (click)="goBack()">
-          <mat-icon>arrow_back</mat-icon>
-        </button>
-        <h2>{{ script()!.name }}</h2>
-        <span class="type-badge">{{ script()!.type }}</span>
-      </div>
-      <button mat-raised-button color="primary" (click)="openAddStepDialog()">
-        <mat-icon>add</mat-icon>
-        Add Step
-      </button>
-    </div>
+    <div class="editor-layout" [class.with-preview]="showPreview()">
+      <div class="editor-section">
+        <div class="header">
+          <div class="title-section">
+            <button mat-icon-button (click)="goBack()">
+              <mat-icon>arrow_back</mat-icon>
+            </button>
+            <h2>{{ script()!.name }}</h2>
+            <span class="type-badge">{{ script()!.type }}</span>
+          </div>
+          <div class="header-actions">
+            <button
+              mat-raised-button
+              [color]="showPreview() ? 'accent' : 'primary'"
+              (click)="togglePreview()"
+            >
+              <mat-icon>{{ showPreview() ? 'visibility_off' : 'visibility' }}</mat-icon>
+              {{ showPreview() ? 'Hide Preview' : 'Show Preview' }}
+            </button>
+            <button mat-raised-button color="primary" (click)="openAddStepDialog()">
+              <mat-icon>add</mat-icon>
+              Add Step
+            </button>
+          </div>
+        </div>
 
-    @if (steps().length === 0) {
-      <mat-card class="empty-state">
-        <mat-card-content>
-          <mat-icon>view_list</mat-icon>
-          <h3>No steps yet</h3>
-          <p>Add steps to build your training script</p>
-          <button mat-raised-button color="primary" (click)="openAddStepDialog()">
-            Add First Step
-          </button>
-        </mat-card-content>
-      </mat-card>
-    } @else {
-      <div class="steps-container" cdkDropList (cdkDropListDropped)="drop($event)">
-        @for (step of steps(); track step.id; let i = $index) {
-          <mat-card class="step-card" cdkDrag>
-            <div class="drag-handle" cdkDragHandle>
-              <mat-icon>drag_indicator</mat-icon>
-            </div>
-            <mat-card-header>
-              <mat-card-title>
-                <span class="step-number">Step {{ i + 1 }}</span>
-                {{ step.title }}
-                @if (step.config?.['autoProgress']) {
-                  <mat-icon class="auto-progress-icon" matTooltip="Auto-advances when action completed">
-                    bolt
-                  </mat-icon>
-                }
-              </mat-card-title>
-            </mat-card-header>
+        @if (steps().length === 0) {
+          <mat-card class="empty-state">
             <mat-card-content>
-              <p class="step-description">{{ step.description }}</p>
-              @if (step.elementSelector) {
-                <p class="step-meta">
-                  <strong>Selector:</strong> <code>{{ step.elementSelector }}</code>
-                </p>
-              }
-              @if (step.actionType) {
-                <p class="step-meta">
-                  <strong>Action:</strong> {{ step.actionType }}
-                </p>
-              }
+              <mat-icon>view_list</mat-icon>
+              <h3>No steps yet</h3>
+              <p>Add steps to build your training script</p>
+              <button mat-raised-button color="primary" (click)="openAddStepDialog()">
+                Add First Step
+              </button>
             </mat-card-content>
-            <mat-card-actions>
-              <button mat-button (click)="openEditStepDialog(step)">
-                <mat-icon>edit</mat-icon>
-                Edit
-              </button>
-              <button mat-button color="warn" (click)="deleteStep(step)">
-                <mat-icon>delete</mat-icon>
-                Delete
-              </button>
-            </mat-card-actions>
           </mat-card>
+        } @else {
+          <div class="steps-container" cdkDropList (cdkDropListDropped)="drop($event)">
+            @for (step of steps(); track step.id; let i = $index) {
+              <mat-card class="step-card" cdkDrag>
+                <div class="drag-handle" cdkDragHandle>
+                  <mat-icon>drag_indicator</mat-icon>
+                </div>
+                <mat-card-header>
+                  <mat-card-title>
+                    <span class="step-number">Step {{ i + 1 }}</span>
+                    {{ step.title }}
+                    @if (step.config?.['autoProgress']) {
+                      <mat-icon class="auto-progress-icon" matTooltip="Auto-advances when action completed">
+                        bolt
+                      </mat-icon>
+                    }
+                  </mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                  <p class="step-description">{{ step.description }}</p>
+                  @if (step.elementSelector) {
+                    <p class="step-meta">
+                      <strong>Selector:</strong> <code>{{ step.elementSelector }}</code>
+                    </p>
+                  }
+                  @if (step.actionType) {
+                    <p class="step-meta">
+                      <strong>Action:</strong> {{ step.actionType }}
+                    </p>
+                  }
+                </mat-card-content>
+                <mat-card-actions>
+                  <button mat-button (click)="openEditStepDialog(step)">
+                    <mat-icon>edit</mat-icon>
+                    Edit
+                  </button>
+                  <button mat-button color="warn" (click)="deleteStep(step)">
+                    <mat-icon>delete</mat-icon>
+                    Delete
+                  </button>
+                </mat-card-actions>
+              </mat-card>
+            }
+          </div>
         }
       </div>
-    }
+
+      @if (showPreview()) {
+        <div class="preview-section">
+          <app-preview-pane [script]="script()!" />
+        </div>
+      }
+    </div>
   }
 </div>

@@ -13,6 +13,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ScriptService } from '../../services/script.service';
 import { Script, ScriptStep } from '../../models/script.model';
 import { StepFormDialogComponent } from '../step-form-dialog/step-form-dialog.component';
+import { PreviewPaneComponent } from '../preview-pane/preview-pane.component';
 
 @Component({
   selector: 'app-script-editor',
@@ -27,6 +28,7 @@ import { StepFormDialogComponent } from '../step-form-dialog/step-form-dialog.co
     MatSnackBarModule,
     MatExpansionModule,
     MatTooltipModule,
+    PreviewPaneComponent,
   ],
   templateUrl: './script-editor.component.html',
   styleUrl: './script-editor.component.css',
@@ -43,6 +45,7 @@ export class ScriptEditorComponent implements OnInit {
   steps = signal<ScriptStep[]>([]);
   loading = signal<boolean>(false);
   error = signal<string | null>(null);
+  showPreview = signal<boolean>(false);
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -138,5 +141,9 @@ export class ScriptEditorComponent implements OnInit {
 
   goBack(): void {
     this.router.navigate(['/products', this.script()?.productId]);
+  }
+
+  togglePreview(): void {
+    this.showPreview.update(v => !v);
   }
 }

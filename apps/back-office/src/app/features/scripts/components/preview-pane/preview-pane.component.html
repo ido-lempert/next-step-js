@@ -1,0 +1,83 @@
+<div class="preview-container" [class.fullscreen]="isFullscreen()">
+  @if (!extensionDetected()) {
+    <app-extension-prompt />
+  } @else {
+    <div class="preview-header">
+      <mat-form-field class="url-input" appearance="outline">
+        <mat-label>Target Website URL</mat-label>
+        <input
+          matInput
+          type="url"
+          [(ngModel)]="targetUrl"
+          (change)="loadUrl()"
+          placeholder="https://example.com"
+        />
+      </mat-form-field>
+
+      <div class="preview-controls">
+        <button
+          mat-icon-button
+          (click)="playScript()"
+          matTooltip="Play Script"
+          [disabled]="!targetUrl()"
+        >
+          <mat-icon>play_arrow</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          (click)="stopScript()"
+          matTooltip="Stop Script"
+          [disabled]="!targetUrl()"
+        >
+          <mat-icon>stop</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          (click)="reloadPreview()"
+          matTooltip="Reload Preview"
+          [disabled]="!targetUrl()"
+        >
+          <mat-icon>refresh</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          (click)="toggleFullscreen()"
+          matTooltip="Toggle Fullscreen"
+        >
+          <mat-icon>{{ isFullscreen() ? 'fullscreen_exit' : 'fullscreen' }}</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    @if (currentStep()) {
+      <div class="preview-status">
+        <mat-icon>info</mat-icon>
+        <span>Currently showing: Step {{ currentStep()!.orderIndex + 1 }} - {{ currentStep()!.title }}</span>
+      </div>
+    }
+
+    @if (previewError()) {
+      <div class="preview-error">
+        <mat-icon>error</mat-icon>
+        <span>{{ previewError() }}</span>
+      </div>
+    }
+
+    <div class="iframe-wrapper">
+      @if (targetUrl()) {
+        <iframe
+          #previewFrame
+          [src]="targetUrl()"
+          (load)="onIframeLoad()"
+          class="preview-iframe"
+          sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+        ></iframe>
+      } @else {
+        <div class="no-url-message">
+          <mat-icon>web</mat-icon>
+          <p>Enter a target website URL to start previewing</p>
+        </div>
+      }
+    </div>
+  }
+</div>
