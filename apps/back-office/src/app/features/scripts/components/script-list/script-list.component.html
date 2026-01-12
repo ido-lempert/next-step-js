@@ -1,10 +1,16 @@
 <div class="script-list-container">
   <div class="header">
     <h2>Scripts</h2>
-    <button mat-raised-button color="primary" (click)="openCreateDialog()">
-      <mat-icon>add</mat-icon>
-      Create Script
-    </button>
+    <div class="header-actions">
+      <button mat-raised-button color="accent" (click)="openRecordingDialog()">
+        <mat-icon>smart_toy</mat-icon>
+        Generate with AI
+      </button>
+      <button mat-raised-button color="primary" (click)="openCreateDialog()">
+        <mat-icon>add</mat-icon>
+        Create Script
+      </button>
+    </div>
   </div>
 
   @if (loading()) {

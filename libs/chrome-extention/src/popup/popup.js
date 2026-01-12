@@ -1,9 +1,17 @@
 // Popup UI Script for Next-Step Preview Extension
+// Handles preview mode toggle and recording controls
 
 document.addEventListener('DOMContentLoaded', async () => {
   const toggle = document.getElementById('preview-toggle');
   const statusDot = document.getElementById('status-dot');
   const statusText = document.getElementById('status-text');
+  const recordBtn = document.getElementById('record-btn');
+  const stopBtn = document.getElementById('stop-btn');
+  const recordingStatus = document.getElementById('recording-status');
+  const recordingComplete = document.getElementById('recording-complete');
+  const downloadBtn = document.getElementById('download-btn');
+
+  let currentRecording = null;
 
   // Get current active tab
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -29,6 +37,20 @@ document.addEventListener('DOMContentLoaded', async () => {
   } catch (error) {
     console.error('Failed to get preview state:', error);
     updateStatus(false);
+  }
+
+  // Check recording state
+  try {
+    const recordingState = await chrome.runtime.sendMessage({
+      type: 'GET_RECORDING_STATE',
+      tabId: tab.id,
+    });
+
+    if (recordingState.isRecording) {
+      showRecordingInProgress();
+    }
+  } catch (error) {
+    console.error('Failed to get recording state:', error);
   }
 
   // Handle toggle changes
@@ -105,5 +127,79 @@ document.addEventListener('DOMContentLoaded', async () => {
   function showError(message) {
     // In a production version, this could be a nicer UI element
     alert(`Error: ${message}`);
+  }
+
+  /**
+   * Recording button handlers
+   */
+  recordBtn.addEventListener('click', async () => {
+    try {
+      const response = await chrome.runtime.sendMessage({
+        type: 'START_RECORDING',
+        tabId: tab.id,
+      });
+
+      if (response.success) {
+        showRecordingInProgress();
+      } else {
+        showError('Failed to start recording');
+      }
+    } catch (error) {
+      console.error('Error starting recording:', error);
+      showError(error.message);
+    }
+  });
+
+  stopBtn.addEventListener('click', async () => {
+    try {
+      const response = await chrome.runtime.sendMessage({
+        type: 'STOP_RECORDING',
+        tabId: tab.id,
+      });
+
+      if (response.success) {
+        currentRecording = response.recording;
+        showRecordingComplete();
+      } else {
+        showError('Failed to stop recording');
+      }
+    } catch (error) {
+      console.error('Error stopping recording:', error);
+      showError(error.message);
+    }
+  });
+
+  downloadBtn.addEventListener('click', () => {
+    if (!currentRecording) {
+      showError('No recording available');
+      return;
+    }
+
+    // Create download link
+    const dataStr = JSON.stringify(currentRecording, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    
+    const filename = `recording_${currentRecording.sessionId}.json`;
+    
+    chrome.downloads.download({
+      url: url,
+      filename: filename,
+      saveAs: true,
+    });
+  });
+
+  function showRecordingInProgress() {
+    recordBtn.style.display = 'none';
+    stopBtn.style.display = 'flex';
+    recordingStatus.style.display = 'block';
+    recordingComplete.style.display = 'none';
+  }
+
+  function showRecordingComplete() {
+    recordBtn.style.display = 'flex';
+    stopBtn.style.display = 'none';
+    recordingStatus.style.display = 'none';
+    recordingComplete.style.display = 'block';
   }
 });

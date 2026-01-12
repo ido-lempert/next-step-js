@@ -10,10 +10,11 @@
   <div class="container">
     <div class="header">
       <h1>Next-Step Preview</h1>
-      <p class="subtitle">Developer Preview Mode</p>
+      <p class="subtitle">Developer Preview & Recording Mode</p>
     </div>
 
     <div class="content">
+      <!-- Preview Mode Section -->
       <div class="status-section">
         <label for="preview-toggle" class="toggle-label">
           <span class="label-text">Preview Mode</span>
@@ -28,8 +29,38 @@
         </div>
       </div>
 
+      <!-- Recording Section -->
+      <div class="recording-section">
+        <h3>🎥 AI Script Generation</h3>
+        <p class="recording-description">Record your actions to generate training scripts with AI</p>
+        
+        <div class="recording-controls">
+          <button id="record-btn" class="btn btn-record">
+            <span class="record-dot"></span>
+            Start Recording
+          </button>
+          <button id="stop-btn" class="btn btn-stop" style="display: none;">
+            <span class="stop-icon">⏹</span>
+            Stop Recording
+          </button>
+        </div>
+
+        <div id="recording-status" class="recording-status" style="display: none;">
+          <span class="recording-indicator">
+            <span class="pulse-dot"></span>
+            Recording in progress...
+          </span>
+        </div>
+
+        <div id="recording-complete" class="recording-complete" style="display: none;">
+          <p>✅ Recording completed!</p>
+          <button id="download-btn" class="btn btn-download">Download Recording</button>
+          <p class="help-text">Upload this file in Back Office to generate a script</p>
+        </div>
+      </div>
+
       <div class="info-section">
-        <h3>What does this do?</h3>
+        <h3>Preview Mode</h3>
         <ul class="info-list">
           <li>Removes CSP and X-Frame-Options headers</li>
           <li>Allows this page to load in Back Office iframe</li>
@@ -40,10 +71,10 @@
       <div class="instructions">
         <h3>How to use:</h3>
         <ol class="instructions-list">
-          <li>Enable preview mode for this tab</li>
-          <li>Open Back Office script editor</li>
-          <li>Enter this page URL in preview</li>
-          <li>Test your training scripts live</li>
+          <li><strong>Preview:</strong> Enable preview mode, then load page in Back Office</li>
+          <li><strong>Recording:</strong> Click Start Recording and perform your workflow</li>
+          <li>Click Stop when done, download the recording file</li>
+          <li>Upload in Back Office to generate AI-powered script</li>
         </ol>
       </div>
 
@@ -58,6 +89,6 @@
     </div>
   </div>
 
-  <script src="popup.js"></script>
+  <script src="popup.js" type="module"></script>
 </body>
 </html>

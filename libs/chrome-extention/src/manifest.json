@@ -2,13 +2,15 @@
   "manifest_version": 3,
   "name": "Next-Step Preview Extension",
   "version": "1.0.0",
-  "description": "Enable preview of Next-Step training scripts in iframe without security restrictions",
+  "description": "Enable preview of Next-Step training scripts in iframe without security restrictions, plus AI-powered script recording",
   "permissions": [
     "activeTab",
     "declarativeNetRequest",
     "declarativeNetRequestWithHostAccess",
     "scripting",
-    "storage"
+    "storage",
+    "tabs",
+    "downloads"
   ],
   "host_permissions": [
     "<all_urls>"

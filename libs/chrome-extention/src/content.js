@@ -1,5 +1,8 @@
 // Content Script for Next-Step Preview Extension
 // Injects SDK and manages communication between Back Office and SDK
+// Also handles recording mode for AI script generation
+
+import { recorder } from './lib/recorder.js';
 
 (function () {
   console.log('Next-Step Preview Extension content script loaded');
@@ -8,7 +11,7 @@
   let sdkInjected = false;
 
   // Check if this is inside an iframe (likely the Back Office preview iframe)
-  const isInIframe = window !== window.top;
+  // const isInIframe = window !== window.top;
 
   // Initialize: Check if preview mode is enabled
   async function initialize() {
@@ -93,6 +96,26 @@
         },
         '*'
       );
+      sendResponse({ success: true });
+    }
+
+    // Recording messages
+    if (message.type === 'START_RECORDING') {
+      recorder.start();
+      sendResponse({ success: true });
+    }
+
+    if (message.type === 'STOP_RECORDING') {
+      const recording = recorder.stop();
+      sendResponse({ success: true, recording });
+    }
+
+    if (message.type === 'IS_RECORDING') {
+      sendResponse({ isRecording: recorder.isActive() });
+    }
+
+    if (message.type === 'ADD_SCREENSHOT') {
+      recorder.addScreenshot(message.interactionIndex, message.screenshot);
       sendResponse({ success: true });
     }
 

@@ -107,6 +107,22 @@ export class ScriptListComponent implements OnInit {
     });
   }
 
+  openRecordingDialog(): void {
+    import('../recording-upload-dialog/recording-upload-dialog.component').then((m) => {
+      const dialogRef = this.dialog.open(m.RecordingUploadDialogComponent, {
+        width: '600px',
+        data: { productId: this.productId() },
+        disableClose: true,
+      });
+
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.loadScripts();
+        }
+      });
+    });
+  }
+
   togglePublish(script: Script): void {
     const action = script.status === 'published' ? 'unpublish' : 'publish';
     const observable =

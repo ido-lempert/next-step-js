@@ -1,11 +1,15 @@
 // Background Service Worker for Next-Step Preview Extension
 // Handles declarativeNetRequest rules for CSP/X-Frame-Options bypass
+// Also handles recording state and screenshot capture
 
 const RULE_ID_CSP = 1;
 const RULE_ID_XFRAME = 2;
 const RULE_ID_CORS = 3;
 
-// Listen for messages from popup
+// Recording state
+const recordingState = new Map(); // tabId -> { isRecording, sessionId }
+
+// Listen for messages from popup and content scripts
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'ENABLE_PREVIEW') {
     enablePreviewMode(message.tabId)
@@ -41,6 +45,68 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         sendResponse({ enabled: false, error: error.message });
       });
     return true; // Keep channel open for async response
+  }
+
+  // Recording messages
+  if (message.type === 'START_RECORDING') {
+    startRecording(message.tabId)
+      .then(() => {
+        sendResponse({ success: true });
+      })
+      .catch((error) => {
+        console.error('Failed to start recording:', error);
+        sendResponse({ success: false, error: error.message });
+      });
+    return true;
+  }
+
+  if (message.type === 'STOP_RECORDING') {
+    stopRecording(message.tabId)
+      .then((recording) => {
+        sendResponse({ success: true, recording });
+      })
+      .catch((error) => {
+        console.error('Failed to stop recording:', error);
+        sendResponse({ success: false, error: error.message });
+      });
+    return true;
+  }
+
+  if (message.type === 'GET_RECORDING_STATE') {
+    const state = recordingState.get(message.tabId) || { isRecording: false };
+    sendResponse(state);
+    return true;
+  }
+
+  // Handle screenshot capture requests from content script
+  if (message.type === 'CAPTURE_SCREENSHOT') {
+    captureScreenshot(sender.tab.id, message.interactionIndex)
+      .then(() => {
+        sendResponse({ success: true });
+      })
+      .catch((error) => {
+        console.error('Failed to capture screenshot:', error);
+        sendResponse({ success: false, error: error.message });
+      });
+    return true;
+  }
+
+  // Handle recording events from content script
+  if (message.type === 'RECORDING_STARTED') {
+    recordingState.set(sender.tab.id, {
+      isRecording: true,
+      sessionId: message.sessionId,
+    });
+    updateRecordingBadge(sender.tab.id, true);
+    return true;
+  }
+
+  if (message.type === 'RECORDING_STOPPED') {
+    recordingState.delete(sender.tab.id);
+    updateRecordingBadge(sender.tab.id, false);
+    // Store recording in extension storage
+    storeRecording(message.recording);
+    return true;
   }
 });
 
@@ -163,10 +229,11 @@ async function getPreviewState(tabId) {
 chrome.tabs.onRemoved.addListener(async (tabId) => {
   console.log(`Tab ${tabId} closed, cleaning up`);
   await chrome.storage.local.remove([`preview_${tabId}`]);
+  recordingState.delete(tabId);
 });
 
 // Clean up when tabs are updated (navigated away)
-chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
   if (changeInfo.status === 'loading' && changeInfo.url) {
     // Check if preview mode was enabled for this tab
     const result = await chrome.storage.local.get([`preview_${tabId}`]);
@@ -177,5 +244,73 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     }
   }
 });
+
+/**
+ * Start recording on a tab
+ */
+async function startRecording(tabId) {
+  console.log(`Starting recording on tab ${tabId}`);
+  
+  // Send message to content script to start recording
+  await chrome.tabs.sendMessage(tabId, { type: 'START_RECORDING' });
+  
+  recordingState.set(tabId, { isRecording: true });
+  updateRecordingBadge(tabId, true);
+}
+
+/**
+ * Stop recording on a tab
+ */
+async function stopRecording(tabId) {
+  console.log(`Stopping recording on tab ${tabId}`);
+  
+  // Send message to content script to stop recording
+  const response = await chrome.tabs.sendMessage(tabId, { type: 'STOP_RECORDING' });
+  
+  recordingState.delete(tabId);
+  updateRecordingBadge(tabId, false);
+  
+  return response.recording;
+}
+
+/**
+ * Capture screenshot and send to content script
+ */
+async function captureScreenshot(tabId, interactionIndex) {
+  try {
+    const dataUrl = await chrome.tabs.captureVisibleTab(null, {
+      format: 'jpeg',
+      quality: 70,
+    });
+
+    // Send screenshot back to content script
+    await chrome.tabs.sendMessage(tabId, {
+      type: 'ADD_SCREENSHOT',
+      interactionIndex,
+      screenshot: dataUrl,
+    });
+  } catch (error) {
+    console.error('Failed to capture screenshot:', error);
+  }
+}
+
+/**
+ * Update badge to show recording state
+ */
+async function updateRecordingBadge(tabId, isRecording) {
+  if (isRecording) {
+    await chrome.action.setBadgeText({ text: 'REC', tabId });
+    await chrome.action.setBadgeBackgroundColor({ color: '#EF4444', tabId });
+  } else {
+    // Check if preview mode is still on
+    const isPreview = await getPreviewState(tabId);
+    if (isPreview) {
+      await chrome.action.setBadgeText({ text: 'ON', tabId });
+      await chrome.action.setBadgeBackgroundColor({ color: '#10B981', tabId });
+    } else {
+      await chrome.action.setBadgeText({ text: '', tabId });
+    }
+  }
+}
 
 console.log('Next-Step Preview Extension background service worker initialized');

@@ -4,6 +4,7 @@ import projectRoutes from './routes/projects';
 import productRoutes from './routes/products';
 import scriptRoutes from './routes/scripts';
 import scriptStepRoutes from './routes/script-steps';
+import aiGenerationRoutes from './routes/ai-generation';
 
 const host = process.env.HOST ?? 'localhost';
 const port = process.env.PORT ? Number(process.env.PORT) : 3333;
@@ -35,6 +36,7 @@ app.use('/api/projects', tenantContext, projectRoutes);
 app.use('/api', tenantContext, productRoutes);
 app.use('/api', tenantContext, scriptRoutes);
 app.use('/api', tenantContext, scriptStepRoutes);
+app.use('/api', tenantContext, aiGenerationRoutes);
 
 app.listen(port, host, () => {
   console.log(`[ ready ] http://${host}:${port}`);
