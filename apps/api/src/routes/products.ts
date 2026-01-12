@@ -72,6 +72,33 @@ productRouter.post(
   }
 );
 
+// GET /api/products/:id - Get a single product
+productRouter.get('/products/:id', (req: RequestWithTenant, res: Response) => {
+  try {
+    const { id } = req.params;
+    const tenantId = req.tenantId!;
+
+    // Get product and verify it exists
+    const product = productStore.findById(id);
+    if (!product) {
+      res.status(404).json({ error: 'Product not found' });
+      return;
+    }
+
+    // Verify project ownership (tenant isolation)
+    const project = projectStore.findById(product.project_id, tenantId);
+    if (!project) {
+      res.status(404).json({ error: 'Product not found' });
+      return;
+    }
+
+    res.json(product);
+  } catch (error) {
+    console.error('Error fetching product:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // PUT /api/products/:id - Update a product
 productRouter.put('/products/:id', (req: RequestWithTenant, res: Response) => {
   try {

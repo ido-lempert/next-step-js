@@ -1,0 +1,52 @@
+<div class="preview-container">
+  @if (scriptService.currentScript(); as script) {
+    <!-- Header -->
+    <div class="header">
+      <div class="script-info">
+        <h1>Preview: {{ script.name }}</h1>
+        <p class="subtitle">
+          Type: {{ script.type }} | Status: {{ script.status }} | Steps: {{ script.steps.length }}
+        </p>
+      </div>
+      <button class="btn-secondary" (click)="onBack()">Back to Editor</button>
+    </div>
+
+    <!-- URL Input -->
+    <div class="url-bar">
+      <label for="previewUrl">Preview URL:</label>
+      <input
+        type="url"
+        id="previewUrl"
+        [value]="previewUrl()"
+        (change)="onChangeUrl($event)"
+        placeholder="Enter URL to preview (e.g., https://example.com)"
+      />
+    </div>
+
+    <!-- Info Message -->
+    <div class="info-message">
+      <p>
+        <strong>Note:</strong> This is a basic preview iframe. Full interactive
+        script playback requires the Chrome Extension (future feature).
+      </p>
+      <p>
+        The iframe will display the target website. In a future release, the
+        Chrome Extension will overlay step indicators and enable interactive
+        walkthrough mode.
+      </p>
+    </div>
+
+    <!-- Preview Iframe -->
+    <div class="preview-frame">
+      <iframe
+        [src]="previewUrl()"
+        title="Script Preview"
+        sandbox="allow-same-origin allow-scripts allow-forms"
+      ></iframe>
+    </div>
+  }
+
+  @if (scriptService.loading()) {
+    <div class="loading">Loading...</div>
+  }
+</div>

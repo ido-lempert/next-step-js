@@ -1,0 +1,196 @@
+<div class="script-editor-container">
+  @if (scriptService.currentScript(); as script) {
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+      <a routerLink="/projects">Projects</a>
+      <span class="separator">›</span>
+      <a [routerLink]="['/products', script.product_id, 'scripts']">Scripts</a>
+      <span class="separator">›</span>
+      <span>{{ script.name }}</span>
+    </nav>
+
+    <!-- Header -->
+    <div class="header">
+      <div class="script-info">
+        @if (editingScriptName()) {
+          <div class="name-editor">
+            <input
+              type="text"
+              [(ngModel)]="tempScriptName"
+              (keyup.enter)="onSaveScriptName()"
+              (keyup.escape)="onCancelScriptName()"
+            />
+            <button class="btn-small btn-primary" (click)="onSaveScriptName()">
+              Save
+            </button>
+            <button class="btn-small btn-secondary" (click)="onCancelScriptName()">
+              Cancel
+            </button>
+          </div>
+        } @else {
+          <h1 (click)="onEditScriptName()">{{ script.name }} ✏️</h1>
+        }
+        
+        <div class="script-controls">
+          <div class="control-group">
+            <label>Type:</label>
+            <select [value]="script.type" (change)="onChangeType($event)">
+              <option value="walkthrough">Walkthrough</option>
+              <option value="modal">Modal</option>
+            </select>
+          </div>
+          
+          <div class="control-group">
+            <label>Status:</label>
+            <button
+              [class]="script.status === 'published' ? 'btn-success' : 'btn-warning'"
+              (click)="onTogglePublish()"
+            >
+              {{ script.status === 'published' ? 'Published' : 'Draft' }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button class="btn-secondary" (click)="onBack()">Back</button>
+        <button class="btn-primary" (click)="onPreview()">Preview</button>
+      </div>
+    </div>
+
+    <!-- Steps Section -->
+    <div class="steps-section">
+      <div class="steps-header">
+        <h2>Steps ({{ script.steps.length }})</h2>
+        <button class="btn-primary" (click)="onShowAddStep()">Add Step</button>
+      </div>
+
+      @if (script.steps.length === 0) {
+        <div class="empty-state">
+          <p>No steps yet. Add your first step to get started.</p>
+        </div>
+      } @else {
+        <div
+          cdkDropList
+          (cdkDropListDropped)="onDrop($event)"
+          class="steps-list"
+        >
+          @for (step of script.steps; track step.id) {
+            <div class="step-card" cdkDrag>
+              <div class="step-header">
+                <div class="drag-handle" cdkDragHandle>⋮⋮</div>
+                <div class="step-number">{{ step.order_index + 1 }}</div>
+                <div class="step-title" (click)="toggleStepExpanded(step.id)">
+                  {{ step.title }}
+                </div>
+                <div class="step-actions">
+                  <button class="btn-small btn-edit" (click)="onShowEditStep(step)">
+                    Edit
+                  </button>
+                  <button class="btn-small btn-delete" (click)="onDeleteStep(step)">
+                    Delete
+                  </button>
+                </div>
+              </div>
+
+              @if (isStepExpanded(step.id)) {
+                <div class="step-details">
+                  @if (step.description) {
+                    <div class="detail-row">
+                      <strong>Description:</strong>
+                      <p>{{ step.description }}</p>
+                    </div>
+                  }
+                  @if (step.element_selector) {
+                    <div class="detail-row">
+                      <strong>Selector:</strong>
+                      <code>{{ step.element_selector }}</code>
+                    </div>
+                  }
+                  @if (step.action_type) {
+                    <div class="detail-row">
+                      <strong>Action:</strong>
+                      <span class="badge">{{ step.action_type }}</span>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+
+  @if (scriptService.loading()) {
+    <div class="loading">Loading...</div>
+  }
+
+  @if (scriptService.error()) {
+    <div class="error">{{ scriptService.error() }}</div>
+  }
+</div>
+
+<!-- Step Dialog -->
+@if (showStepDialog()) {
+  <div class="dialog-overlay">
+    <div class="dialog dialog-large">
+      <h2>{{ editingStep() ? 'Edit Step' : 'Add Step' }}</h2>
+      <form (submit)="onSaveStep()">
+        <div class="form-group">
+          <label for="stepTitle">Title:*</label>
+          <input
+            type="text"
+            id="stepTitle"
+            [(ngModel)]="stepTitle"
+            name="stepTitle"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="stepDescription">Description:</label>
+          <textarea
+            id="stepDescription"
+            [(ngModel)]="stepDescription"
+            name="stepDescription"
+            rows="3"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="stepSelector">Element Selector:</label>
+          <input
+            type="text"
+            id="stepSelector"
+            [(ngModel)]="stepSelector"
+            name="stepSelector"
+            placeholder="#element-id or .class-name"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="stepActionType">Action Type:</label>
+          <select
+            id="stepActionType"
+            [(ngModel)]="stepActionType"
+            name="stepActionType"
+          >
+            <option value="click">Click</option>
+            <option value="hover">Hover</option>
+            <option value="input">Input</option>
+            <option value="navigate">Navigate</option>
+            <option value="wait">Wait</option>
+          </select>
+        </div>
+
+        <div class="dialog-actions">
+          <button type="button" class="btn-secondary" (click)="onCancelStep()">
+            Cancel
+          </button>
+          <button type="submit" class="btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

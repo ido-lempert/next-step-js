@@ -1,4 +1,5 @@
 import { Product } from '../types/product';
+import { scriptStore } from './script-store';
 
 class ProductStore {
   private products: Map<string, Product> = new Map();
@@ -38,6 +39,9 @@ class ProductStore {
   }
 
   delete(id: string): boolean {
+    // CASCADE delete: delete all scripts belonging to this product
+    scriptStore.deleteByProductId(id);
+    
     return this.products.delete(id);
   }
 

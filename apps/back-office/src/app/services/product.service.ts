@@ -47,6 +47,12 @@ export class ProductService {
       );
   }
 
+  getProduct(id: string): Observable<Product> {
+    return this.http.get<Product>(`${this.apiUrl}/products/${id}`, {
+      headers: this.getHeaders(),
+    });
+  }
+
   createProduct(
     projectId: string,
     dto: CreateProductDto

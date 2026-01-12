@@ -54,6 +54,16 @@
             <td>{{ formatDate(product.updated_at) }}</td>
             <td>
               <button
+                class="btn-primary"
+                [routerLink]="[
+                  '/products',
+                  product.id,
+                  'scripts'
+                ]"
+              >
+                Scripts
+              </button>
+              <button
                 class="btn-edit"
                 [routerLink]="[
                   '/projects',
