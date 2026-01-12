@@ -1,9 +1,14 @@
 # Next-Step SDK
 
-Interactive walkthrough component for web applications. This SDK enables you to create step-by-step guided tours with spotlight effects, smart tooltip positioning, and progress tracking.
+Interactive walkthrough and modal components for web applications. This SDK enables you to create step-by-step guided tours with spotlight effects, smart tooltip positioning, and progress tracking.
+
+[![Bundle Size](https://img.shields.io/badge/bundle%20size-8.67KB-success)](https://bundlephobia.com)
+[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue)](https://www.typescriptlang.org/)
 
 ## Features
 
+- 🚀 **Simple Integration**: Add one script tag, start training users
 - ✨ **Shadow DOM Isolation**: Complete CSS isolation prevents conflicts with host page styles
 - 🎯 **Smart Positioning**: Tooltips automatically position themselves to stay within viewport
 - 🎨 **Spotlight Effect**: Highlights target elements with smooth backdrop dimming
@@ -11,50 +16,126 @@ Interactive walkthrough component for web applications. This SDK enables you to 
 - 📊 **Progress Tracking**: Built-in analytics and progress indicators
 - ♿ **Accessibility**: ARIA labels, focus management, and screen reader support
 - 📱 **Responsive**: Works seamlessly on desktop and mobile devices
-- 🚀 **Lightweight**: < 50KB gzipped, zero dependencies
+- 📦 **Tiny Bundle**: Only 8.67KB gzipped
+- 🎨 **Framework Agnostic**: Works with React, Vue, Angular, or vanilla JS
+- 🔄 **Auto-initialization**: Reads config from data attributes
+- 🔌 **Zero Dependencies**: No external runtime dependencies
 
-## Installation
+## Quick Start
+
+### Option 1: CDN (Recommended)
+
+Add this script tag to your HTML:
+
+```html
+<script 
+  src="https://cdn.nextstep.app/sdk/latest/nextstep.min.js"
+  data-project-id="your-project-id"
+></script>
+```
+
+That's it! The SDK will automatically initialize and fetch your scripts when the page loads.
+
+### Option 2: npm Installation
 
 ```bash
 npm install @nstep/sdk
 ```
 
-## Quick Start
+#### Using the SDK via Global API
 
-```typescript
-import { startWalkthrough } from '@nstep/sdk';
+When using the CDN, the SDK is available via `window.NextStep`:
 
-const script = {
-  id: 'my-walkthrough',
-  productId: 'my-product',
-  name: 'Getting Started',
-  type: 'walkthrough',
-  status: 'published',
-  steps: [
-    {
-      id: 'step-1',
-      scriptId: 'my-walkthrough',
-      orderIndex: 0,
-      title: 'Welcome!',
-      description: 'This is your first step.',
-      elementSelector: '#welcome-button'
-    },
-    {
-      id: 'step-2',
-      scriptId: 'my-walkthrough',
-      orderIndex: 1,
-      title: 'Next Feature',
-      description: 'Here is another feature to explore.',
-      elementSelector: '#feature-section'
-    }
-  ]
-};
+```javascript
+// Get available scripts
+const scripts = NextStep.getScripts();
 
-// Start the walkthrough
-await startWalkthrough(script);
+// Start a walkthrough
+const walkthrough = scripts.find(s => s.type === 'walkthrough');
+if (walkthrough) {
+  await NextStep.startWalkthrough(walkthrough.id);
+}
 ```
 
-## API Reference
+#### Using the SDK via npm
+
+```typescript
+import { NextStepSDK } from '@nstep/sdk';
+
+const sdk = new NextStepSDK();
+await sdk.init({
+  projectId: 'your-project-id',
+  environment: 'production'
+});
+
+// Get and start scripts
+const scripts = sdk.getScripts();
+const walkthrough = scripts.find(s => s.type === 'walkthrough');
+if (walkthrough) {
+  await sdk.startWalkthrough(walkthrough.id);
+}
+```
+
+## SDK Initialization API
+
+### Global API (CDN)
+
+When using the CDN, `window.NextStep` provides:
+
+#### `NextStep.init(options): Promise<void>`
+
+Initialize the SDK programmatically.
+
+```javascript
+await NextStep.init({
+  projectId: 'your-project-id',
+  environment: 'production',
+  onReady: () => console.log('SDK ready'),
+  onError: (error) => console.error('SDK error:', error)
+});
+```
+
+#### `NextStep.isInitialized(): boolean`
+
+Check if the SDK is initialized.
+
+#### `NextStep.getScripts(): Script[]`
+
+Get all available scripts for your project.
+
+#### `NextStep.getScript(scriptId): Script | undefined`
+
+Get a specific script by ID.
+
+#### `NextStep.startWalkthrough(scriptId, config?): Promise<WalkthroughComponent>`
+
+Start a walkthrough by script ID.
+
+#### `NextStep.startModal(scriptId, config?): Promise<ModalComponent>`
+
+Start a modal by script ID.
+
+#### `NextStep.destroy(): void`
+
+Clean up and destroy the SDK.
+
+### Configuration Options
+
+```typescript
+interface InitOptions {
+  projectId: string;              // Required: Your project ID
+  apiKey?: string;                // Optional: API key for private projects
+  environment?: 'development' | 'staging' | 'production';
+  apiUrl?: string;                // Optional: Custom API endpoint
+  debug?: boolean;                // Optional: Enable debug logs
+  onReady?: () => void;          // Optional: Called when initialized
+  onError?: (error: Error) => void; // Optional: Error callback
+}
+```
+
+## Legacy API (Direct Usage)
+
+You can still use the SDK directly without initialization:
 
 ### `startWalkthrough(script, config?)`
 

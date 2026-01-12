@@ -24,6 +24,23 @@
         "generatePackageJson": true
       }
     },
+    "build-browser": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/sdk/browser",
+        "main": "libs/sdk/src/browser.ts",
+        "tsConfig": "libs/sdk/tsconfig.lib.json",
+        "format": ["esm"],
+        "bundle": true,
+        "minify": true,
+        "sourcemap": true,
+        "outputFileName": "nextstep.min.js",
+        "platform": "browser",
+        "target": "es2020",
+        "external": []
+      }
+    },
     "nx-release-publish": {
       "options": {
         "packageRoot": "dist/{projectRoot}"

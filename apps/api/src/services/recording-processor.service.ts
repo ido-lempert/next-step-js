@@ -96,7 +96,7 @@ class RecordingProcessorService {
     // Create steps
     for (let i = 0; i < generatedScript.steps.length; i++) {
       const step = generatedScript.steps[i];
-      await scriptStepService.create(script.id, {
+      await scriptStepService.create(script.id, 'default-tenant', {
         title: step.title,
         description: step.description,
         elementSelector: step.elementSelector,

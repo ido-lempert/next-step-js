@@ -7,3 +7,6 @@ export * from './lib/components/StepTooltip';
 export * from './lib/components/ProgressIndicator';
 export * from './lib/actions/ActionDetector';
 export * from './lib/utils/storage';
+export * from './lib/core/NextStepSDK';
+export * from './lib/core/config';
+export * from './lib/core/api';
